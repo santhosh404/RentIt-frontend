@@ -2,22 +2,25 @@ import React, { useContext, useEffect } from 'react'
 import CustomNavbar from '../../../components/reusable/Navbar'
 import { UserContext } from '../../../contexts/users/UserContext';
 import { Badge, Button, Card, Label, Spinner, TextInput } from 'flowbite-react';
-import { HiOutlineExclamationCircle, HiPlusCircle } from 'react-icons/hi';
+import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { HiPlus } from 'react-icons/hi2'
+import { useNavigate } from 'react-router-dom';
 
 export default function OwnerRequest() {
 
     const { allOwnerRequest, ownerRequest, loading } = useContext(UserContext);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         allOwnerRequest()
     }, [])
 
     return (
-        <>
+        <div className='dark:bg-gray-800 dark:text-[#fff]'>
             <CustomNavbar />
 
-            <div className='max-w-[1000px] mx-auto my-10'>
+            <div className='max-w-[1000px]  mx-auto my-10 '>
                 {
                     loading ? (
                         <div className='flex justify-center items-center'>
@@ -28,10 +31,10 @@ export default function OwnerRequest() {
                             <div className='max-w-[800px] mx-auto flex flex-col gap-3 justify-center items-center flex-wrap mt-10'>
                                 <h1 className='text-[20px] font-[700] flex items-center gap-2'> {<HiOutlineExclamationCircle color='red' size={'30px'} />} No owner request found!</h1>
                                 <p>To initiate the owner request, simply click the button below. Once received, we'll thoroughly review your request and proceed accordingly. This will enable you to effortlessly post your store for rent!</p>
-                                <Button pill className='mt-8' color='blue'><HiPlus className="mr-1 h-5 w-5" /> Initiate Request</Button>
+                                <Button pill className='mt-8' color='blue' onClick={() => navigate('/user/initiate-owner-request')}><HiPlus className="mr-1 h-5 w-5" /> Initiate Request</Button>
                             </div>
 
-                        ) : (
+                        ) : !loading && (
                             <>
                                 <div className='flex flex-col gap-5 flex-wrap mt-10'>
                                     <div className='flex items-center justify-between'>
@@ -102,6 +105,10 @@ export default function OwnerRequest() {
                                                     <Label>Pincode</Label>
                                                     <TextInput color={'blue'} size={'sm'} disabled className='w-[280px]' value={ownerRequest?.pincode} />
                                                 </div>
+                                                <div className='invisible'>
+                                                    <Label>Pincode</Label>
+                                                    <TextInput color={'blue'} size={'sm'} disabled className='w-[280px]' value={ownerRequest?.pincode} />
+                                                </div>
                                             </div>
                                         </Card>
                                     </div>
@@ -157,6 +164,6 @@ export default function OwnerRequest() {
                 }
 
             </div>
-        </>
+        </div>
     )
 }

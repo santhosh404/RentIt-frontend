@@ -41,7 +41,23 @@ export const getOwnerRequest = async (id) => {
     try {
         const response = await instance.get(`/user/common/owner-request`, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`
+            }
+        });
+        if(response) {
+            return response.data;
+        }
+    }
+    catch(err) {
+        throw err
+    }
+}
+
+export const makeOwnerRequest = async (values) => {
+    try {
+        const response = await instance.post(`/user/common/owner-request`, values, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`
             }
         });
         if(response) {

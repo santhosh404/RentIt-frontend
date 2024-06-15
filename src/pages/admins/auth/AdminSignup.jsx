@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import SignInComponent from '../../../components/auth/SignInComponent';
 
 //Formik imports
 import { useFormik } from 'formik';
 import { signUpValidationSchema } from '../../../utils/ValidationSchema';
 import SignUpComponent from '../../../components/auth/SignUpComponent';
-import { userSignUpService } from '../../../services/users/UserAuthServices';
 import { useNavigate } from 'react-router-dom';
+import { adminSignUpService } from '../../../services/admin/AdminAuthServices';
 
 
-export default function UserSignup() {
+export default function AdminSignUp() {
 
   const [error, setError] = useState({
     state: false,
@@ -42,10 +41,10 @@ export default function UserSignup() {
         password: values.password
       }
       try {
-        const response = await userSignUpService(payload);
+        const response = await adminSignUpService(payload);
         if (response) {
           setLoading(false)
-          navigate('/user/sign-in')
+          navigate('/admin/sign-in')
         }
       }
       catch (err) {
@@ -61,7 +60,7 @@ export default function UserSignup() {
   return (
     <div className='my-10'>
       <SignUpComponent
-        formTitle="User Signup"
+        formTitle="Admin Signup"
         formik={formik}
         error={error}
         loading={loading}

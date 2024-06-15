@@ -6,10 +6,10 @@ import { useFormik } from 'formik';
 import { signInValidationSchema } from '../../../utils/ValidationSchema';
 import { userSignInService } from '../../../services/users/UserAuthServices';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../../../contexts/users/UserContext';
+import { adminSignInService } from '../../../services/admin/AdminAuthServices';
 
 
-export default function UserSignin() {
+export default function AdminSignIn() {
 
     const [error, setError] = useState({
         state: false,
@@ -18,8 +18,6 @@ export default function UserSignin() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate()
 
-    //Context
-    const { setUserDetails } = useContext(UserContext);
 
     const formik = useFormik({
         initialValues: {
@@ -38,11 +36,11 @@ export default function UserSignin() {
                 password: values.password
             }
             try {
-                const response = await userSignInService(payload);
+                const response = await adminSignInService(payload);
                 if (response) {
                     setLoading(false)
                     sessionStorage.setItem('token', response.data.token)
-                    navigate('/user/home')
+                    navigate('/admin/home')
                 }
             }
             catch (err) {
@@ -58,7 +56,7 @@ export default function UserSignin() {
     return (
         <div className='my-10'>
             <SignInComponent
-                formTitle="User Signin"
+                formTitle="Admin Signin"
                 formik={formik}
                 error={error}
                 loading={loading}

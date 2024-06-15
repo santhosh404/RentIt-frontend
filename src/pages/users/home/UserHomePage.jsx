@@ -1,7 +1,14 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import CustomNavbar from '../../../components/reusable/Navbar'
+import { UserContext } from '../../../contexts/users/UserContext'
 
 export default function UserHomePage() {
+
+  const { getUserById } = useContext(UserContext)
+
+  useEffect(() => {
+    getUserById()
+  }, [])
   return (
     <>
     <CustomNavbar />

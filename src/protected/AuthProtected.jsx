@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 
-export default function AuthProtected() {
+export default function AuthProtected({route}) {
 
     const navigate = useNavigate();
     const [isLoggedIn, setLoggedIn] = useState(false);
 
     useEffect(() => {
-        if (!localStorage.getItem('token')) {
+        if (!sessionStorage.getItem('token')) {
             setLoggedIn(false);
-            navigate('user/sign-in');
+            navigate(route);
         }
         else {
             setLoggedIn(true);
