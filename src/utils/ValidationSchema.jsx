@@ -40,3 +40,22 @@ export const initiateOwnerRequestValidationSchema = Yup.object().shape({
         })
     )
 })
+
+
+export const postPropertyValidationSchema = Yup.object().shape({
+    square_feet: Yup.string().required('Square feet required'),
+    available_from: Yup.string().required('Available From is required'),
+    available_to: Yup.string().required('Available To is required'),
+    description: Yup.string().required('Description is required'),
+    address_line1: Yup.string().required('Address Line 1 is required'),
+    address_line2: Yup.string().required('Address Line 2 is required'),
+    city: Yup.string().required('City is required').notOneOf(['Choose city'], 'City is required'),
+    state: Yup.string().notOneOf(['Choose state'], 'State is required'),
+    pincode: Yup.string().required('Pincode is required'),
+    rate: Yup.string().required('Rate is required'),
+    specification: Yup.string().required('Specification is required'),
+    keywords: Yup.array()
+        .min(2, 'At least 2 keywords are required')
+        .max(5, 'No more than 5 keywords are allowed')
+        .required('Keywords are required')
+})

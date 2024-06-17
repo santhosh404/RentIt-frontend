@@ -35,9 +35,10 @@ export default function CustomNavbar() {
                     <div className="flex md:order-2">
 
                         <Dropdown inline label={<Avatar rounded bordered placeholderInitials='RR' />} className='p-3'>
-                            <Dropdown.Item>My Profile</Dropdown.Item>
+                            <Dropdown.Item onClick={() => navigate('/user/my-profile')}>My Profile</Dropdown.Item>
+                            <Dropdown.Item onClick={() => navigate('/user/my-stores')}>My Stores</Dropdown.Item>
                             <Dropdown.Item onClick={() => navigate('/user/owner-request')}>Owner Request</Dropdown.Item>
-                            <Dropdown.Item>Booking Logs</Dropdown.Item>
+                            <Dropdown.Item onClick={() => navigate('/user/booking-logs')}>Booking Logs</Dropdown.Item>
                             <Dropdown.Divider />
                             <Dropdown.Item onClick={handleSignOut}>Sign Out</Dropdown.Item>
                         </Dropdown>

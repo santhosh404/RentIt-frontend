@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-#navbar > :first-child {
-    
+.rti--container .rti--input:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.rti--container .rti--input {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+
+.animate-spin {
+    animation: spin .3s linear infinite !important;
 }

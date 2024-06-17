@@ -1,13 +1,12 @@
 import React, { useContext, useEffect } from 'react'
 import CustomNavbar from '../../../components/reusable/Navbar'
 import { UserContext } from '../../../contexts/users/UserContext';
-import { Badge, Button, Card, Label, Spinner, TextInput } from 'flowbite-react';
-import { HiOutlineExclamationCircle } from 'react-icons/hi';
-import { HiPlus } from 'react-icons/hi2'
 import { useNavigate } from 'react-router-dom';
+import { Button, Spinner } from 'flowbite-react';
+import { HiExclamation, HiExclamationCircle, HiMail, HiOutlineExclamationCircle, HiOutlineMail, HiPlus } from 'react-icons/hi';
+import { HiXCircle } from 'react-icons/hi2';
 
-export default function OwnerRequest() {
-
+export default function MyStores() {
     const { allOwnerRequest, ownerRequest, loading } = useContext(UserContext);
 
     const navigate = useNavigate();
@@ -17,10 +16,9 @@ export default function OwnerRequest() {
     }, [])
 
     return (
-        <div className='dark:bg-gray-800 dark:text-[#fff]'>
+        <>
             <CustomNavbar />
-
-            <div className='max-w-[1000px]  mx-auto my-20 '>
+            <div className='max-w-[1000px] mx-auto mt-20'>
                 {
                     loading ? (
                         <div className='flex justify-center items-center'>
@@ -30,13 +28,45 @@ export default function OwnerRequest() {
                         !loading && !ownerRequest ? (
                             <div className='max-w-[800px] mx-auto flex flex-col gap-3 justify-center items-center flex-wrap mt-10'>
                                 <h1 className='text-[20px] font-[700] flex items-center gap-2'> {<HiOutlineExclamationCircle color='red' size={'30px'} />} No owner request found!</h1>
-                                <p>To initiate the owner request, simply click the button below. Once received, we'll thoroughly review your request and proceed accordingly. This will enable you to effortlessly post your store for rent!</p>
+                                <p className='text-justify'>To initiate the owner request, simply click the button below. Once received, we'll thoroughly review your request and proceed accordingly. This will enable you to effortlessly post your store for rent!</p>
                                 <Button pill className='mt-8' color='blue' onClick={() => navigate('/user/initiate-owner-request')}><HiPlus className="mr-1 h-5 w-5" /> Initiate Request</Button>
                             </div>
 
                         ) : !loading && (
                             <>
-                                <div className='flex flex-col gap-5 flex-wrap mt-10'>
+                                {
+                                    ownerRequest.is_approved === 3 ? (
+                                        <div className='max-w-[800px] mx-auto flex flex-col gap-3 justify-center items-center flex-wrap mt-10'>
+                                            <h1 className='text-[20px] font-[700] flex items-center gap-2'> {<HiExclamationCircle color='#FD9B63' size={'30px'} />} OOPS! You're owner request is still pending</h1>
+                                            <p className='text-justify'>We are pleased to inform you that your owner request is currently pending. Our team is reviewing the details and will provide you with an update as soon as possible. In the meantime, if you have any questions or need further assistance, please feel free to contact our support team or your system administrator. Thank you for your patience and understanding.</p>
+                                            {/* <Button pill className='mt-8' color='blue' onClick={() => window.location.href = "mailto:admin@rentit.com"}><HiOutlineMail className="mr-1 h-5 w-5" /> Contact Administrator</Button> */}
+                                            <Button pill className='mt-8' color='blue' onClick={() => window.location.href = "mailto:admin@rentit.com"}><HiOutlineMail className="mr-1 h-5 w-5" /> Contact Administrator</Button>
+
+                                        </div>
+                                    ) :
+                                        ownerRequest.is_approved === 2 ? (
+                                            <div className='max-w-[800px] mx-auto flex flex-col gap-3 justify-center items-center flex-wrap mt-10'>
+                                                <h1 className='text-[20px] font-[700] flex items-center gap-2'> {<HiXCircle color='red' size={'30px'} />} OOPS! You're owner request was rejected</h1>
+                                                <p className='text-justify'>We regret to inform you that your owner request has been declined. To resolve this issue, we recommend reaching out to our support team or your system administrator. They will be able to provide you with the necessary assistance and guidance to move forward. Thank you for your understanding and cooperation.</p>
+                                                <Button pill className='mt-8' color='blue' onClick={() => window.location.href = "mailto:admin@rentit.com"}><HiOutlineMail className="mr-1 h-5 w-5" /> Contact Administrator</Button>
+                                            </div>
+                                        ) : (
+                                            <>
+                                                <div className='flex items-center justify-between'>
+                                                    <div className='flex flex-col gap-2'>
+                                                        <h1 className='font-[500] text-[20px]'>My Stores</h1>
+                                                        <p>You're now approved owner. Now you can start posting your property or Store for rent</p>
+                                                    </div>
+                                                    <div>
+                                                        <Button pill color='blue' onClick={() => navigate('/user/post-property')}><HiPlus className="mr-1 h-5 w-5" />Post property</Button>
+                                                    </div>
+
+                                                </div>
+                                            </>
+                                        )
+                                }
+
+                                {/* <div className='flex flex-col gap-5 flex-wrap mt-10'>
                                     <div className='flex items-center justify-between'>
                                         <div className='flex flex-col gap-3'>
                                             <div className='flex items-center gap-4'>
@@ -118,7 +148,7 @@ export default function OwnerRequest() {
                                         {
                                             ownerRequest?.store_details && ownerRequest?.store_details.map((store, idx) => {
                                                 return (
-                                                    <div key={idx}>
+                                                    <>
                                                         <h1 className='font-[300]'>#{idx + 1} Store</h1>
                                                         <Card className='p-5'>
                                                             <div className='flex justify-between gap-4 flex-wrap'>
@@ -152,18 +182,18 @@ export default function OwnerRequest() {
                                                                 </div>
                                                             </div>
                                                         </Card>
-                                                    </div>
+                                                    </>
                                                 )
                                             })
                                         }
                                     </div>
-                                </div>
+                                </div> */}
                             </>
                         )
                     )
                 }
 
             </div>
-        </div>
+        </>
     )
 }

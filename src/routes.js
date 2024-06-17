@@ -5,8 +5,12 @@ import ViewOwnerRequest from "./pages/admins/home/ViewOwnerRequest"
 import ViewOwnerRequestDetail from "./pages/admins/home/ViewOwnerRequestDetail"
 import UserSignin from "./pages/users/auth/UserSignin"
 import UserSignup from "./pages/users/auth/UserSignup"
+import BookingLogs from "./pages/users/home/BookingLogs"
 import InitiateOwnerRequest from "./pages/users/home/InitiateOwnerRequest"
+import MyProfile from "./pages/users/home/MyProfile"
+import MyStores from "./pages/users/home/MyStores"
 import OwnerRequest from "./pages/users/home/OwnerRequest"
+import PostProperty from "./pages/users/home/PostProperty"
 import UserHomePage from "./pages/users/home/UserHomePage"
 
 export const userCommonRoutes = [
@@ -41,6 +45,22 @@ export const userProtectedRoutes = [
     {
         path: '/user/initiate-owner-request',
         element: InitiateOwnerRequest
+    },
+    {
+        path: '/user/post-property',
+        element: PostProperty
+    },
+    {
+        path: '/user/my-stores',
+        element: MyStores
+    },
+    {
+        path: '/user/my-profile',
+        element: MyProfile
+    },
+    {
+        path: '/user/booking-logs',
+        element: BookingLogs
     }
 ]
 
