@@ -5,15 +5,17 @@ import { toast } from 'react-toastify';
 import { uploadFile } from '../../services/CommonServices';
 import { AiOutlineLoading } from 'react-icons/ai';
 import { CommonContext } from '../../contexts/CommonContext';
+import { converReverseDate, convertDate, isValidDate } from '../../utils/helper';
 
-export default function PostPropertyForm({ formik }) {
+export default function PostPropertyForm({ formik, storeDetail, isUpdateOrDelete }) {
 
     const [isAvailableTo, setIsAvailableTo] = useState(false);
-    const [selectedValue, setSelectedValue] = useState('');
-    const [keyword, setKeyword] = useState([]);
-    const [imageUrls, setImageUrls] = useState([]);
+    const [selectedValue, setSelectedValue] = useState(formik.values.specification || '');
+    const [keyword, setKeyword] = useState([]); // Ensure keyword is initialized as an array
+    const [imageUrls, setImageUrls] = useState(formik.values.images || []);
     const [isUploading, setIsUploading] = useState(false);
     const [districts, setDistricts] = useState([]);
+
 
     const { getAllStates, states, getAllDistricts } = useContext(CommonContext);
 
@@ -28,6 +30,16 @@ export default function PostPropertyForm({ formik }) {
     useEffect(() => {
         formik.setFieldValue('images', imageUrls);
     }, [imageUrls])
+
+    useEffect(() => {
+        if (storeDetail) {
+            setSelectedValue(storeDetail.specification);
+            setKeyword(storeDetail?.keywords || []);
+            setImageUrls(storeDetail.images);
+            setIsAvailableTo(storeDetail?.available_to === 'Not Specified' ? true : false);
+            handleStateOnChange({ target: { value: storeDetail?.state } })
+        }
+    }, [storeDetail]);
 
     const handleChange = (event) => {
         setSelectedValue(event.target.value);
@@ -76,6 +88,7 @@ export default function PostPropertyForm({ formik }) {
         }
     }
 
+
     return (
         <>
             <div className='flex flex-col gap-4'>
@@ -109,7 +122,7 @@ export default function PostPropertyForm({ formik }) {
                                     size={'sm'}
                                     className='w-[280px]'
                                     name='available_from'
-                                    value={formik.values?.available_from}
+                                    value={converReverseDate(formik.values?.available_from)}
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
                                 />
@@ -129,13 +142,13 @@ export default function PostPropertyForm({ formik }) {
                                     className='w-[280px]'
                                     name='available_to'
                                     disabled={isAvailableTo}
-                                    value={formik.values.available_to}
+                                    value={converReverseDate(formik.values.available_to)}
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
                                 />
 
                                 <div className="flex items-center gap-2 mt-2">
-                                    <Checkbox id="accept" onChange={handleAvailableToCheckbox} color={'blue'} />
+                                    <Checkbox id="accept" checked={isAvailableTo} onChange={handleAvailableToCheckbox} color={'blue'} />
                                     <Label htmlFor="accept" className="flex">
                                         I don't want to specify the To date
                                     </Label>
@@ -151,7 +164,6 @@ export default function PostPropertyForm({ formik }) {
                             <div className='w-full'>
                                 <Label>Description</Label>
                                 <Textarea
-                                    placeholder="Enter short description"
                                     rows={5}
                                     name='description'
                                     className='resize-none'
@@ -286,7 +298,7 @@ export default function PostPropertyForm({ formik }) {
                     <h1 className='font-[500]'>Other Details</h1>
                     <Card className='p-5'>
                         <div className='w-full gap-5 flex justify-between'>
-                            <div className='w-[500px]'>
+                            <div className='w-[30%]'>
                                 <Label>Rate Per Month</Label>
                                 <TextInput
                                     type='number'
@@ -304,8 +316,26 @@ export default function PostPropertyForm({ formik }) {
                                     )
                                 }
                             </div>
+                            <div className='w-[30%]'>
+                                <Label>Advance Amount</Label>
+                                <TextInput
+                                    type='text'
+                                    name='advance_amt'
+                                    size={'sm'}
+                                    value={formik.values.advance_amt}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                />
+                                {
+                                    formik.touched.advance_amt && formik.errors.advance_amt && (
+                                        <small className='text-[red]'>
+                                            {formik.errors.advance_amt}
+                                        </small>
+                                    )
+                                }
+                            </div>
 
-                            <div className='flex flex-col w-[400px]'>
+                            <div className='flex flex-col w-[40%]'>
                                 <label htmlFor='checkbox' className='font-medium text-sm'>Specification:</label>
                                 <ul className="flex w-full gap-2 mt-1" id='checkbox'>
                                     <li>
@@ -374,11 +404,29 @@ export default function PostPropertyForm({ formik }) {
                             </div>
                         </div>
                         <div className='w-full'>
+                            <Label>Comment</Label>
+                            <Textarea
+                                rows={5}
+                                name='comment'
+                                className='resize-none'
+                                value={formik.values.comment}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                            />
+                            {
+                                formik.touched.comment && formik.errors.comment && (
+                                    <small className='text-[red]'>
+                                        {formik.errors.comment}
+                                    </small>
+                                )
+                            }
+                        </div>
+                        <div className='w-full'>
                             <Label>Keywords</Label>
                             <TagsInput
                                 value={keyword}
                                 onChange={setKeyword}
-                                name="keywords"
+                                name="keyword"
                                 placeHolder="Enter the keywords related to your store"
                             />
                             {
@@ -408,13 +456,13 @@ export default function PostPropertyForm({ formik }) {
                                 }
                             </div>
                             {
-                                imageUrls.length > 0 && (
+                                imageUrls?.length > 0 && (
                                     <div className='flex flex-col gap-2 mt-3'>
                                         <h1 className='text-sm font-medium'>Uploaded Files</h1>
                                         <ul>
 
                                             {
-                                                imageUrls.map((url, index) => (
+                                                imageUrls?.map((url, index) => (
                                                     <li key={index}>
                                                         <p>{url}</p>
                                                     </li>

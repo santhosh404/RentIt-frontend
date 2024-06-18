@@ -13,3 +13,17 @@ export const getUser = async () => {
         throw err
     }
 }
+
+export const updateUser = async (payload) => {
+    try {
+        const response = await instance.put('/user/common/user', payload, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`
+            }
+        })
+        return response.data;
+    }
+    catch (err) {
+        throw err
+    }
+}

@@ -27,7 +27,9 @@ export default function PostProperty() {
       state: 'Choose state',
       pincode: '',
       rate: '',
+      advance_amt: '',
       specification: '',
+      comment: '',
       keywords: [],
       images: []
     },
@@ -58,7 +60,7 @@ export default function PostProperty() {
           <div className='flex flex-col gap-5 flex-wrap'>
             <div className='flex items-center justify-between'>
               <div className='flex flex-col gap-1'>
-                <h1 className='text-[30px] font-[500]'>Post Your Store For Rent</h1>
+                <h1 className='font-[900] text-[23px]'>Post Your Store For Rent</h1>
                 <p>Fill up the details to post your store for rent</p>
               </div>
 

@@ -1,24 +1,46 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import CustomNavbar from '../../../components/reusable/Navbar'
 import { UserContext } from '../../../contexts/users/UserContext';
 import { useNavigate } from 'react-router-dom';
 import { Button, Spinner } from 'flowbite-react';
 import { HiExclamation, HiExclamationCircle, HiMail, HiOutlineExclamationCircle, HiOutlineMail, HiPlus } from 'react-icons/hi';
 import { HiXCircle } from 'react-icons/hi2';
+import { getStoreById } from '../../../services/owners/OwnerCommonServices';
+import { toast } from 'react-toastify';
+import StoreCard from '../../../components/users/StoreCard';
 
 export default function MyStores() {
     const { allOwnerRequest, ownerRequest, loading } = useContext(UserContext);
+    const [myStore, setMyStore] = useState([]);
+    const [storeDataLoading, setStoreDataLoading] = useState(false);
 
     const navigate = useNavigate();
 
+    const getMyStores = async () => {
+        setStoreDataLoading(true)
+        try {
+            const response = await getStoreById()
+            if (response) {
+                setMyStore(response.data.store);
+                setStoreDataLoading(false)
+            }
+        }
+
+        catch (err) {
+            setStoreDataLoading(false)
+            toast.error(err?.response?.data?.data?.error || err?.response?.data?.message || err.message);
+        }
+    }
+
     useEffect(() => {
-        allOwnerRequest()
+        allOwnerRequest();
+        getMyStores();
     }, [])
 
     return (
         <>
             <CustomNavbar />
-            <div className='max-w-[1000px] mx-auto mt-20'>
+            <div className='max-w-[1200px] mx-auto mt-20'>
                 {
                     loading ? (
                         <div className='flex justify-center items-center'>
@@ -54,13 +76,35 @@ export default function MyStores() {
                                             <>
                                                 <div className='flex items-center justify-between'>
                                                     <div className='flex flex-col gap-2'>
-                                                        <h1 className='font-[500] text-[20px]'>My Stores</h1>
+                                                        <h1 className='font-[900] text-[23px]'>My Stores</h1>
                                                         <p>You're now approved owner. Now you can start posting your property or Store for rent</p>
                                                     </div>
                                                     <div>
                                                         <Button pill color='blue' onClick={() => navigate('/user/post-property')}><HiPlus className="mr-1 h-5 w-5" />Post property</Button>
                                                     </div>
-
+                                                </div>
+                                                <div className='flex justify-center flex-wrap'>
+                                                    {
+                                                        storeDataLoading ? (
+                                                            <div className='flex justify-center items-center'>
+                                                                <Spinner />
+                                                            </div>
+                                                        ) : (
+                                                            myStore?.length < 1 ? (
+                                                                <div className='flex justify-center mt-20 items-center'>
+                                                                   <h1 className='font-bold'>No stores found</h1>
+                                                                </div>
+                                                            ) : (
+                                                                <div className='flex justify-center gap-3 my-10 flex-wrap items-center'>
+                                                                    {
+                                                                        myStore?.map((store, idx) => (
+                                                                            <StoreCard key={idx} storeDetails={store} />
+                                                                        ))
+                                                                    }
+                                                                </div>
+                                                            )
+                                                        )
+                                                    }
                                                 </div>
                                             </>
                                         )

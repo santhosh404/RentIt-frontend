@@ -8,6 +8,7 @@ import UserSignup from "./pages/users/auth/UserSignup"
 import BookingLogs from "./pages/users/home/BookingLogs"
 import InitiateOwnerRequest from "./pages/users/home/InitiateOwnerRequest"
 import MyProfile from "./pages/users/home/MyProfile"
+import MyStoreDetails from "./pages/users/home/MyStoreDetails"
 import MyStores from "./pages/users/home/MyStores"
 import OwnerRequest from "./pages/users/home/OwnerRequest"
 import PostProperty from "./pages/users/home/PostProperty"
@@ -53,6 +54,10 @@ export const userProtectedRoutes = [
     {
         path: '/user/my-stores',
         element: MyStores
+    },
+    {
+        path: '/user/my-stores/:id',
+        element: MyStoreDetails
     },
     {
         path: '/user/my-profile',

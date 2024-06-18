@@ -40,7 +40,7 @@ export default function OwnerRequest() {
                                     <div className='flex items-center justify-between'>
                                         <div className='flex flex-col gap-3'>
                                             <div className='flex items-center gap-4'>
-                                                <h1 className='text-[30px] font-[500]'>My Request</h1>
+                                                <h1 className='font-[900] text-[23px]'>My Request</h1>
                                                 <Badge color={ownerRequest.is_approved === 1 ? 'success' : ownerRequest?.is_approved === 2 ? 'failure' : 'warning'}>{ownerRequest.is_approved === 1 ? 'Approved' : ownerRequest?.is_approved === 2 ? 'Rejected' : 'Pending'}</Badge>
                                             </div>
                                             <div>

@@ -53,9 +53,20 @@ export const postPropertyValidationSchema = Yup.object().shape({
     state: Yup.string().notOneOf(['Choose state'], 'State is required'),
     pincode: Yup.string().required('Pincode is required'),
     rate: Yup.string().required('Rate is required'),
+    advance_amt: Yup.string().required('Advance amount is required'),
     specification: Yup.string().required('Specification is required'),
+    comment: Yup.string().required('Comment is required'),
     keywords: Yup.array()
         .min(2, 'At least 2 keywords are required')
         .max(5, 'No more than 5 keywords are allowed')
         .required('Keywords are required')
+})
+
+
+export const UserValidationSchema = Yup.object().shape({
+    first_name: Yup.string().required('First Name is required'),
+    last_name: Yup.string().required('Last Name is required'),
+    email: Yup.string().email('Please enter the valid email').required('Email is required'),
+    phone_number: Yup.string().required('Phone Number is required').matches(phoneRegExp, 'Please enter a valid phone number'),
+    // password: Yup.string().matches(passwordRules, { message: "Password should contain minimum 5 characters, 1 upper case letter, 1 lower case letter, 1 numeric digit." })
 })

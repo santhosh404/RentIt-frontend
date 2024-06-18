@@ -21,7 +21,7 @@ export default function SignUpComponent({ loading, formTitle, formik, error }) {
                 <h1 className='flex justify-center text-[20px] font-[600]'>{formTitle}</h1>
                 <form className="flex max-w-md flex-col gap-4" onSubmit={formik.handleSubmit}>
                     <div>
-                        <div className="mb-2 block">
+                        <div>
                             <Label htmlFor="firstName" value="Your First Name" />
                         </div>
                         <TextInput id="firstName" type="text" name='firstName' placeholder="John" value={formik.values.firstName} onChange={formik.handleChange} onBlur={formik.onBlur} />
@@ -34,7 +34,7 @@ export default function SignUpComponent({ loading, formTitle, formik, error }) {
                         }
                     </div>
                     <div>
-                        <div className="mb-2 block">
+                        <div>
                             <Label htmlFor="lastName" value="Your Last Name" />
                         </div>
                         <TextInput id="lastName" type="text" name='lastName' placeholder="Doe" value={formik.values.lastName} onChange={formik.handleChange} onBlur={formik.onBlur} />
@@ -47,7 +47,7 @@ export default function SignUpComponent({ loading, formTitle, formik, error }) {
                         }
                     </div>
                     <div>
-                        <div className="mb-2 block">
+                        <div>
                             <Label htmlFor="phoneNumber" value="Your Phone Number" />
                         </div>
                         <TextInput id="phoneNumber" type="text" name='phoneNumber' icon={HiPhone} placeholder="Doe" value={formik.values.phoneNumber} onChange={formik.handleChange} onBlur={formik.onBlur} />
@@ -60,7 +60,7 @@ export default function SignUpComponent({ loading, formTitle, formik, error }) {
                         }
                     </div>
                     <div>
-                        <div className="mb-2 block">
+                        <div>
                             <Label htmlFor="email1" value="Your email" />
                         </div>
                         <TextInput id="email1" type="email" name='email' icon={HiMail} placeholder="name@example.com" value={formik.values.email} onChange={formik.handleChange} onBlur={formik.onBlur} />
@@ -73,7 +73,7 @@ export default function SignUpComponent({ loading, formTitle, formik, error }) {
                         }
                     </div>
                     <div>
-                        <div className="mb-2 block">
+                        <div>
                             <Label htmlFor="password1" value="Your password" />
                         </div>
                         <TextInput id="password1" name='password' type="password" value={formik.values.password} onChange={formik.handleChange} onBlur={formik.handleBlur} />

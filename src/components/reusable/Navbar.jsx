@@ -1,5 +1,6 @@
 import { Avatar, Button, Dropdown, Navbar } from 'flowbite-react'
 import React from 'react'
+import { HiOutlineInformationCircle } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom'
 
 export default function CustomNavbar() {
@@ -22,7 +23,10 @@ export default function CustomNavbar() {
                 <Navbar.Toggle />
                 <div className='flex gap-5 items-center'>
                     <Navbar.Collapse>
-                        <Button color={'blue'} pill onClick={() => navigate('/user/owner-request')}>Make Owner Request</Button>
+                        <Button color={'blue'} pill onClick={() => navigate('/user/owner-request')}>
+                            <HiOutlineInformationCircle className='w-5 h-5 mr-1' />
+                            Make Owner Request
+                        </Button>
                         {/* <Navbar.Link href="#" active>
                         Home
                     </Navbar.Link>

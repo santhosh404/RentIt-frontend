@@ -6,7 +6,7 @@ export default function BookingLogs() {
         <>
             <CustomNavbar />
             <div className='max-w-[1000px] mx-auto mt-20'>
-                <h1>Booking Logs</h1>
+                <h1 className='font-[900] text-[23px]'>Booking Logs</h1>
             </div>
         </>
     )

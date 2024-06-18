@@ -30,10 +30,12 @@ export const UserContextProvider = ({ children }) => {
     }
 
     const getUserById = async () => {
+        setLoading(true);
         try {
             const response = await getUser();
             if (response) {
                 setUser(response.data.user);
+                setLoading(false);
             }
         }
         catch (err) {
@@ -46,7 +48,7 @@ export const UserContextProvider = ({ children }) => {
     return (
         <>
             <UserContext.Provider value={{ user, getUserById, ownerRequest, loading, setOwnerRequest, allOwnerRequest }}>
-                {children} 
+                {children}
             </UserContext.Provider>
 
         </>
