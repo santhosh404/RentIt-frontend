@@ -17,3 +17,12 @@ export const isValidDate = (dateString) => {
     const date = new Date(dateString);
     return date instanceof Date && !isNaN(date);
 };
+
+export const capitalizeAndConcat = (first_name, last_name) => {
+    const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+
+    const capitalizedFirstName = capitalize(first_name);
+    const capitalizedLastName = capitalize(last_name);
+
+    return `${capitalizedFirstName} ${capitalizedLastName}`;
+}

@@ -11,8 +11,10 @@ export default function UserHomePage() {
   }, [])
   return (
     <>
-    <CustomNavbar />
-      <h1>User Home Page</h1>
+      <CustomNavbar />
+      <div className='max-w-[1400px] mx-auto mt-20'>
+        <h1 className='font-[900] text-[23px]'>Stores</h1>
+      </div>
     </>
   )
 }

@@ -12,6 +12,7 @@ import MyStoreDetails from "./pages/users/home/MyStoreDetails"
 import MyStores from "./pages/users/home/MyStores"
 import OwnerRequest from "./pages/users/home/OwnerRequest"
 import PostProperty from "./pages/users/home/PostProperty"
+import RentedStores from "./pages/users/home/RentedStores"
 import UserHomePage from "./pages/users/home/UserHomePage"
 
 export const userCommonRoutes = [
@@ -38,6 +39,10 @@ export const userProtectedRoutes = [
     {
         path: '/user/home',
         element: UserHomePage
+    },
+    {
+        path: '/user/rented-stores',
+        element: RentedStores
     },
     {
         path: '/user/owner-request',

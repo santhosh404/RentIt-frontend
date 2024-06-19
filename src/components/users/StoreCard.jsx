@@ -1,11 +1,25 @@
-import { Badge, Button, Card, Carousel } from 'flowbite-react'
+import { Badge, Button, Card, Carousel, Modal } from 'flowbite-react'
 import React from 'react'
 import { convertDate } from '../../utils/helper'
 import { useNavigate } from 'react-router-dom';
+import { getStoreByStoreId } from '../../services/owners/OwnerCommonServices';
+import { toast } from 'react-toastify';
 
-export default function StoreCard({ storeDetails }) {
+export default function StoreCard({ storeDetails, setOpenModal, setTableRow }) {
 
     const navigate = useNavigate();
+
+    const getStore = async () => {
+        try {
+            const response = await getStoreByStoreId(storeDetails._id);
+            if (response) {
+                setTableRow(response.data.store.bookings)
+            }
+        }
+        catch (err) {
+            toast.error(err.message);
+        }
+    }
 
     return (
         <>
@@ -35,14 +49,7 @@ export default function StoreCard({ storeDetails }) {
                             </Badge>
                         ))}
                     </div>
-                    <h5 className="text-md font-bold tracking-tight text-gray-900 dark:text-white mb-2">
-                        Address Details
-                    </h5>
-                    <div className=" text-gray-900 dark:text-gray-300 mb-4">
-                        <p>{storeDetails.address_line1},</p>
-                        <p>{storeDetails.address_line2},</p>
-                        <p>{storeDetails.city}, {storeDetails.state} - {storeDetails.pincode}</p>
-                    </div>
+
                     <h5 className="text-md font-bold tracking-tight text-gray-900 dark:text-white mb-2">
                         Store Details
                     </h5>
@@ -84,12 +91,21 @@ export default function StoreCard({ storeDetails }) {
                         </tbody>
                     </table>
 
-                    <div className="flex gap-4 justify-between mt-auto">
+                    <div className="flex flex-col gap-4 justify-between mt-auto">
                         <Button onClick={() => navigate(`/user/my-stores/${storeDetails._id}`)} className='w-full' color={'blue'} pill>
                             View Store
                         </Button>
-                        <Button className='w-full' color={'gray'} pill onClick={() => alert('View Property clicked!')}>
-                            View Bookings
+                        <Button
+                            className='w-full'
+                            color={'gray'}
+                            pill
+                            onClick={() => {
+                                setOpenModal(true);
+                                getStore();
+                            }
+                            }
+                        >
+                            View Bookings ({storeDetails.bookings.length})
                         </Button>
                     </div>
                 </div>

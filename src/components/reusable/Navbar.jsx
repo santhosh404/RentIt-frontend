@@ -12,7 +12,7 @@ export default function CustomNavbar() {
     }
     return (
         <>
-            <Navbar fluid rounded className='border-b-2 p-4 sticky top-0 z-[999]' id='navbar'>
+            <Navbar fluid rounded className='border-b-2 p-4 sticky top-0 z-[1]' id='navbar'>
                 <Navbar.Brand onClick={() => navigate('/user/home')} className='cursor-pointer'>
                     <div className='flex flex-col'>
                         <span className="whitespace-nowrap text-[30px] font-[900] dark:text-white">RentIt</span>
@@ -42,6 +42,7 @@ export default function CustomNavbar() {
                             <Dropdown.Item onClick={() => navigate('/user/my-profile')}>My Profile</Dropdown.Item>
                             <Dropdown.Item onClick={() => navigate('/user/my-stores')}>My Stores</Dropdown.Item>
                             <Dropdown.Item onClick={() => navigate('/user/owner-request')}>Owner Request</Dropdown.Item>
+                            <Dropdown.Item onClick={() => navigate('/user/rented-stores')}>Rented Stores</Dropdown.Item>
                             <Dropdown.Item onClick={() => navigate('/user/booking-logs')}>Booking Logs</Dropdown.Item>
                             <Dropdown.Divider />
                             <Dropdown.Item onClick={handleSignOut}>Sign Out</Dropdown.Item>

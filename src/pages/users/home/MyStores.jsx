@@ -2,17 +2,58 @@ import React, { useContext, useEffect, useState } from 'react'
 import CustomNavbar from '../../../components/reusable/Navbar'
 import { UserContext } from '../../../contexts/users/UserContext';
 import { useNavigate } from 'react-router-dom';
-import { Button, Spinner } from 'flowbite-react';
-import { HiExclamation, HiExclamationCircle, HiMail, HiOutlineExclamationCircle, HiOutlineMail, HiPlus } from 'react-icons/hi';
+import { Button, Table, Modal, Spinner, Badge } from 'flowbite-react';
+import { HiDotsVertical, HiExclamation, HiExclamationCircle, HiMail, HiOutlineDotsVertical, HiOutlineExclamationCircle, HiOutlineMail, HiOutlineX, HiPlus } from 'react-icons/hi';
 import { HiXCircle } from 'react-icons/hi2';
 import { getStoreById } from '../../../services/owners/OwnerCommonServices';
 import { toast } from 'react-toastify';
 import StoreCard from '../../../components/users/StoreCard';
+import CustomTable from '../../../components/reusable/Table';
+import { capitalizeAndConcat, convertDate } from '../../../utils/helper';
+
+
+const tableHead = [
+    "S.no",
+    "From",
+    "To",
+    "Requester Name",
+    "Requester Email",
+    "Requester Phone",
+    "Status",
+    "Action"
+]
+
+// const tableRow = [
+//     {
+//         "sno": 1,
+//         "from": "2021-08-01",
+//         "to": "2021-08-31",
+//         "status": "accepted",
+//         "action": "View"
+//     },
+//     {
+//         "sno": 2,
+//         "from": "2021-08-01",
+//         "to": "2021-08-31",
+//         "status": "pending",
+//         "action": "View"
+//     },
+//     {
+//         "sno": 3,
+//         "from": "2021-08-01",
+//         "to": "2021-08-31",
+//         "status": "rejected",
+//         "action": "View"
+//     }
+// ]
+
 
 export default function MyStores() {
     const { allOwnerRequest, ownerRequest, loading } = useContext(UserContext);
     const [myStore, setMyStore] = useState([]);
     const [storeDataLoading, setStoreDataLoading] = useState(false);
+    const [openModal, setOpenModal] = useState(false);
+    const [tableRow, setTableRow] = useState([]);
 
     const navigate = useNavigate();
 
@@ -36,6 +77,61 @@ export default function MyStores() {
         allOwnerRequest();
         getMyStores();
     }, [])
+
+
+    const tableCell = [
+        {
+            cell: (row, idx) => (
+                <Table.Cell># {idx+1}</Table.Cell>
+            ),
+
+        },
+        {
+            cell: (row) => (
+                <Table.Cell>{convertDate(row.start_date)}</Table.Cell>
+            ),
+
+        },
+        {
+            cell: (row) => (
+                <Table.Cell>{convertDate(row.end_date)}</Table.Cell>
+            ),
+        },
+        {
+            cell: (row) => (
+                <Table.Cell>{capitalizeAndConcat(row.user_id.first_name, row.user_id.last_name)}</Table.Cell>
+            ),
+        },
+        {
+            cell: (row) => (
+                <Table.Cell>{row.user_id.email}</Table.Cell>
+            ),
+        },
+        {
+            cell: (row) => (
+                <Table.Cell>{row.user_id.phone_number}</Table.Cell>
+            ),
+        },
+        {
+            cell: (row) => (
+                <Table.Cell>
+                    <Badge color={row.is_available === 1 ? 'success' : row.is_available === 2 ? 'failure': 'warning'}>
+                        {row.is_available === 1 ? 'Approved' : row.is_available === 2 ? 'Rejected' : "Pending"}
+                    </Badge>
+                </Table.Cell>
+            ),
+        },
+        {
+            cell: (row) => (
+                <Table.Cell>
+                    <div className='flex justify-center items-center'>
+                        <HiOutlineDotsVertical className='w-5 h-5 cursor-pointer text-[#000]' />
+                    </div>
+                </Table.Cell>
+            ),
+        },
+
+    ]
 
     return (
         <>
@@ -92,13 +188,19 @@ export default function MyStores() {
                                                         ) : (
                                                             myStore?.length < 1 ? (
                                                                 <div className='flex justify-center mt-20 items-center'>
-                                                                   <h1 className='font-bold'>No stores found</h1>
+                                                                    <h1 className='font-bold'>No stores found</h1>
                                                                 </div>
                                                             ) : (
                                                                 <div className='flex justify-center gap-3 my-10 flex-wrap items-center'>
                                                                     {
                                                                         myStore?.map((store, idx) => (
-                                                                            <StoreCard key={idx} storeDetails={store} />
+                                                                            <StoreCard
+                                                                                key={idx}
+                                                                                storeDetails={store}
+                                                                                setOpenModal={setOpenModal}
+                                                                                setTableRow={setTableRow}
+                                                                                tableRow={tableRow}
+                                                                            />
                                                                         ))
                                                                     }
                                                                 </div>
@@ -109,135 +211,28 @@ export default function MyStores() {
                                             </>
                                         )
                                 }
-
-                                {/* <div className='flex flex-col gap-5 flex-wrap mt-10'>
-                                    <div className='flex items-center justify-between'>
-                                        <div className='flex flex-col gap-3'>
-                                            <div className='flex items-center gap-4'>
-                                                <h1 className='text-[30px] font-[500]'>My Request</h1>
-                                                <Badge color={ownerRequest.is_approved === 1 ? 'success' : ownerRequest?.is_approved === 2 ? 'failure' : 'warning'}>{ownerRequest.is_approved === 1 ? 'Approved' : ownerRequest?.is_approved === 2 ? 'Rejected' : 'Pending'}</Badge>
-                                            </div>
-                                            <div>
-                                                <p className='font-[600]'>{ownerRequest.is_approved === 1 ? "Yeahhh!, You're request has been approved. Go ahead and post your store for rent" : ownerRequest?.is_approved === 2 ? "We're sorry!, You're request has been rejected. Please contact the administrator." : "Hang Tight! We're reviewing your request. Soon you'll response from our side"}</p>
-                                            </div>
-                                        </div>
-
-                                        {
-                                            ownerRequest?.is_approved === 1 && (
-                                                <div>
-                                                    <Button pill color={'success'} onClick={() => navigate('/user/post-property')}>Post property for rent</Button>
-                                                </div>
-
-                                            )
-                                        }
-                                    </div>
-                                    <hr />
-                                    <div className='flex flex-col gap-3'>
-                                        <h1 className='font-[500]'>Basic Details</h1>
-                                        <Card className='p-5'>
-                                            <div className='flex justify-between gap-4 flex-wrap'>
-                                                <div>
-                                                    <Label>First Name</Label>
-                                                    <TextInput color={'blue'} size={'sm'} disabled className='w-[280px]' value={ownerRequest?.first_name} />
-                                                </div>
-                                                <div>
-                                                    <Label>Last Name</Label>
-                                                    <TextInput color={'blue'} size={'sm'} disabled className='w-[280px]' value={ownerRequest?.last_name} />
-                                                </div>
-                                                <div>
-                                                    <Label>Email</Label>
-                                                    <TextInput color={'blue'} size={'sm'} disabled className='w-[280px]' value={ownerRequest?.email} />
-                                                </div>
-                                                <div>
-                                                    <Label>Phone Number</Label>
-                                                    <TextInput color={'blue'} size={'sm'} disabled className='w-[280px]' value={ownerRequest?.phone_number} />
-                                                </div>
-                                            </div>
-                                        </Card>
-                                    </div>
-                                    <div className='flex flex-col gap-3 mt-5'>
-                                        <h1 className='font-[500]'>Address Details</h1>
-                                        <Card>
-                                            <div className='flex justify-between gap-4 flex-wrap'>
-                                                <div>
-                                                    <Label>Adress Line 1</Label>
-                                                    <TextInput color={'blue'} size={'sm'} disabled className='w-[280px]' value={ownerRequest?.address_line1} />
-                                                </div>
-                                                <div>
-                                                    <Label>Address Line 2</Label>
-                                                    <TextInput color={'blue'} size={'sm'} disabled className='w-[280px]' value={ownerRequest?.address_line2} />
-                                                </div>
-                                                <div>
-                                                    <Label>City</Label>
-                                                    <TextInput color={'blue'} size={'sm'} disabled className='w-[280px]' value={ownerRequest?.city} />
-                                                </div>
-                                                <div>
-                                                    <Label>State</Label>
-                                                    <TextInput color={'blue'} size={'sm'} disabled className='w-[280px]' value={ownerRequest?.state} />
-                                                </div>
-                                                <div>
-                                                    <Label>Pincode</Label>
-                                                    <TextInput color={'blue'} size={'sm'} disabled className='w-[280px]' value={ownerRequest?.pincode} />
-                                                </div>
-                                                <div className='invisible'>
-                                                    <Label>Pincode</Label>
-                                                    <TextInput color={'blue'} size={'sm'} disabled className='w-[280px]' value={ownerRequest?.pincode} />
-                                                </div>
-                                            </div>
-                                        </Card>
-                                    </div>
-
-                                    <div className='flex flex-col gap-3 mt-5'>
-                                        <h1 className='font-[500]'>Store Details</h1>
-                                        {
-                                            ownerRequest?.store_details && ownerRequest?.store_details.map((store, idx) => {
-                                                return (
-                                                    <>
-                                                        <h1 className='font-[300]'>#{idx + 1} Store</h1>
-                                                        <Card className='p-5'>
-                                                            <div className='flex justify-between gap-4 flex-wrap'>
-                                                                <div>
-                                                                    <Label>Square Feet</Label>
-                                                                    <TextInput color={'blue'} size={'sm'} disabled className='w-[280px]' value={store?.square_feet} />
-                                                                </div>
-                                                                <div>
-                                                                    <Label>Adress Line 1</Label>
-                                                                    <TextInput color={'blue'} size={'sm'} disabled className='w-[280px]' value={store?.address_line1} />
-                                                                </div>
-                                                                <div>
-                                                                    <Label>Address Line 2</Label>
-                                                                    <TextInput color={'blue'} size={'sm'} disabled className='w-[280px]' value={store?.address_line1} />
-                                                                </div>
-                                                                <div>
-                                                                    <Label>City</Label>
-                                                                    <TextInput color={'blue'} size={'sm'} disabled className='w-[280px]' value={store?.city} />
-                                                                </div>
-                                                                <div>
-                                                                    <Label>State</Label>
-                                                                    <TextInput color={'blue'} size={'sm'} disabled className='w-[280px]' value={store?.state} />
-                                                                </div>
-                                                                <div>
-                                                                    <Label>Pincode</Label>
-                                                                    <TextInput color={'blue'} size={'sm'} disabled className='w-[280px]' value={store?.pincode} />
-                                                                </div>
-                                                                <div>
-                                                                    <Label>Proof</Label>
-                                                                    <TextInput color={'blue'} size={'sm'} disabled className='w-[280px]' value={store?.proof} />
-                                                                </div>
-                                                            </div>
-                                                        </Card>
-                                                    </>
-                                                )
-                                            })
-                                        }
-                                    </div>
-                                </div> */}
                             </>
                         )
                     )
                 }
 
             </div>
+            <Modal show={openModal} onClose={() => setOpenModal(false)} size={'6xl'}>
+                <Modal.Header>Booking details</Modal.Header>
+                <Modal.Body>
+                    <CustomTable
+                        tableHead={tableHead}
+                        tableRow={tableRow}
+                        tableCell={tableCell}
+                    />
+                </Modal.Body>
+                <Modal.Footer className='flex justify-end'>
+                    <Button color="blue" pill onClick={() => setOpenModal(false)}>
+                        <HiOutlineX className='w-5 h-5 mr-1' />
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </>
     )
 }
