@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { getStoreByStoreId } from '../../services/owners/OwnerCommonServices';
 import { toast } from 'react-toastify';
 import { HiOutlineEye } from 'react-icons/hi';
+import { makePayment, paymentVerification } from '../../services/users/UserCommonServices';
 
 export default function StoreCard({ storeDetails, bookingRequest, setOpenModal, setTableRow, isListPage, isRentedStorePage }) {
 
@@ -20,6 +21,60 @@ export default function StoreCard({ storeDetails, bookingRequest, setOpenModal, 
         catch (err) {
             toast.error(err.message);
         }
+    }
+
+    const handlePayNow = async (amount, booking_id) => {
+
+        console.log(amount, booking_id)
+        try {
+
+            const response = await makePayment({ amount, booking_id });
+
+            const options = {
+                key: "rzp_test_tnCdFa30rqjFdx",
+                amount: response?.data?.newPayment?.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                currency: "INR",
+                name: "RentIt Transaction",
+                description: "Test Transaction",
+                image: "https://example.com/your_logo",
+                order_id: response.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+
+
+                handler: function (response) {
+                    console.log(response)
+                    navigate(`/user/payment/success/${response?.data?.newPayment?.razorpay_order_id}`);
+                    //   paymentVerification({ booking_id })
+                    //     .then(() => {
+                    //       console.log("Course enrolled successfully.");
+                    //     })
+                    //     .catch((error) => {
+                    //       console.log("Error enrolling course:", error);
+                    //     });
+                },
+                callback_url: `http://localhost:4000/api/user/common/payment-verification`,
+                prefill: {
+                    name: "Santhosh A",
+                    email: "santhoshmathi2002@gmail.com",
+                    contact: "9000090000",
+                },
+                notes: {
+                    address: "Razorpay Corporate Office",
+                },
+                theme: {
+                    color: "#3399cc",
+                },
+            };
+
+            const rzp1 = new window.Razorpay(options);
+
+            rzp1.open();
+
+        }
+
+        catch (err) {
+            toast.error(err?.response?.data?.data?.error || err?.response?.data?.message || err.message);
+        }
+
     }
 
     return (
@@ -122,7 +177,7 @@ export default function StoreCard({ storeDetails, bookingRequest, setOpenModal, 
                                                         </Badge>
                                                     </Table.Cell>
                                                     <Table.Cell align='center'>
-                                                        <Button color={'blue'} pill size={'xs'} disabled={booking.status === 1 ? false : booking.status === 2 ? true : true}>
+                                                        <Button onClick={() => handlePayNow(100, booking.booking_id)} color={'blue'} pill size={'xs'} disabled={booking.status === 1 ? false : booking.status === 2 ? true : true}>
                                                             Pay Now
                                                         </Button>
                                                     </Table.Cell>
@@ -137,7 +192,7 @@ export default function StoreCard({ storeDetails, bookingRequest, setOpenModal, 
                     }
 
                     <div className="flex flex-col gap-4 justify-between mt-auto">
-                        <Button onClick={() => navigate(`/user/${isListPage || isRentedStorePage ? 'store' :  'my-stores'}/${storeDetails._id}`, {state: { isRentedStorePage: isRentedStorePage }})} className='w-full' color={'blue'} pill>
+                        <Button onClick={() => navigate(`/user/${isListPage || isRentedStorePage ? 'store' : 'my-stores'}/${storeDetails._id}`, { state: { isRentedStorePage: isRentedStorePage } })} className='w-full' color={'blue'} pill>
                             View Store
                         </Button>
                         {

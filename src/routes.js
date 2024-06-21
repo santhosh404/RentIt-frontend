@@ -11,6 +11,7 @@ import MyProfile from "./pages/users/home/MyProfile"
 import MyStoreDetails from "./pages/users/home/MyStoreDetails"
 import MyStores from "./pages/users/home/MyStores"
 import OwnerRequest from "./pages/users/home/OwnerRequest"
+import PaymentSuccess from "./pages/users/home/PaymentSuccess"
 import PostProperty from "./pages/users/home/PostProperty"
 import RentedStores from "./pages/users/home/RentedStores"
 import StoreDetails from "./pages/users/home/StoreDetails"
@@ -76,6 +77,10 @@ export const userProtectedRoutes = [
     {
         path: '/user/booking-logs',
         element: BookingLogs
+    },
+    {
+        path: "/user/payment/success/:id",
+        element: PaymentSuccess
     }
 ]
 

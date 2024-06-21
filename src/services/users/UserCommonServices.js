@@ -70,3 +70,31 @@ export const getBookingRequestOfUser = async () => {
         throw err
     }
 }
+
+export const makePayment = async (payload) => {
+    try {
+        const response = await instance.post('/user/common/payment', payload, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`
+            }
+        })
+        return response.data;
+    }
+    catch (err) {
+        throw err
+    }
+}
+
+export const paymentVerification = async (payload) => {
+    try {
+        const response = await instance.post('/user/common/payment-verification', payload, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`
+            }
+        })
+        return response.data;
+    }
+    catch (err) {
+        throw err
+    }
+}
