@@ -70,3 +70,9 @@ export const UserValidationSchema = Yup.object().shape({
     phone_number: Yup.string().required('Phone Number is required').matches(phoneRegExp, 'Please enter a valid phone number'),
     // password: Yup.string().matches(passwordRules, { message: "Password should contain minimum 5 characters, 1 upper case letter, 1 lower case letter, 1 numeric digit." })
 })
+
+
+export const bookStoreValidationSchema = Yup.object().shape({
+    start_date: Yup.string().required('Start Date is required'),
+    end_date: Yup.string().required('End Date is required')
+})

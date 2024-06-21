@@ -9,9 +9,16 @@ export const converReverseDate = (date) => {
 }
 
 
-export const getDateAndTimeFromUnixTimestamp = (isoDate) => {
-    return moment(isoDate).tz('Asia/Kolkata').format('LLL');
-}
+export const getDateAndTimeFromIsoString = (isoDate) => {
+    const parsedDate = moment(isoDate);
+
+    if (!parsedDate.isValid()) {
+        throw new Error('Invalid date format');
+    }
+
+    return parsedDate.tz('Asia/Kolkata').format('LLL');
+};
+
 
 export const isValidDate = (dateString) => {
     const date = new Date(dateString);

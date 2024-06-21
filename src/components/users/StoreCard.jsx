@@ -1,11 +1,12 @@
-import { Badge, Button, Card, Carousel, Modal } from 'flowbite-react'
+import { Badge, Button, Card, Carousel, Modal, Table } from 'flowbite-react'
 import React from 'react'
-import { convertDate } from '../../utils/helper'
+import { convertDate, getDateAndTimeFromIsoString } from '../../utils/helper'
 import { useNavigate } from 'react-router-dom';
 import { getStoreByStoreId } from '../../services/owners/OwnerCommonServices';
 import { toast } from 'react-toastify';
+import { HiOutlineEye } from 'react-icons/hi';
 
-export default function StoreCard({ storeDetails, setOpenModal, setTableRow }) {
+export default function StoreCard({ storeDetails, bookingRequest, setOpenModal, setTableRow, isListPage, isRentedStorePage }) {
 
     const navigate = useNavigate();
 
@@ -23,7 +24,7 @@ export default function StoreCard({ storeDetails, setOpenModal, setTableRow }) {
 
     return (
         <>
-            <Card className="w-96">
+            <Card className='w-full'>
                 <Carousel
                     showArrows={true}
                     showThumbs={false}
@@ -37,17 +38,20 @@ export default function StoreCard({ storeDetails, setOpenModal, setTableRow }) {
                         </div>
                     )) : (
                         <div>
-                            <img src="https://via.placeholder.com/400" alt="Property" />
+                            <img src="https://via.placeholder.com/1200" alt="Property" />
                         </div>
                     )}
                 </Carousel>
-                <div className="p-4">
-                    <div className="flex flex-wrap mb-4">
+                <div className="px-4">
+                    <div className="flex flex-wrap">
                         {storeDetails.keywords.map((keyword, index) => (
                             <Badge key={index} color="info" className="mr-2 mb-2">
                                 {keyword}
                             </Badge>
                         ))}
+                    </div>
+                    <div>
+                        <p className='my-4 text-justify'>{storeDetails.description}</p>
                     </div>
 
                     <h5 className="text-md font-bold tracking-tight text-gray-900 dark:text-white mb-2">
@@ -83,31 +87,80 @@ export default function StoreCard({ storeDetails, setOpenModal, setTableRow }) {
                                     <div className='flex flex-col items center justify-center'>
                                         <h1 className='text-center font-semibold'>{convertDate(storeDetails.available_from)}</h1>
                                         <small className='text-center'>Available From</small>
-
                                     </div>
                                 </td>
-
                             </tr>
                         </tbody>
                     </table>
+                    {
+                        isRentedStorePage && (
+                            <>
+                                <h5 className="text-md font-bold tracking-tight text-gray-900 dark:text-white mb-2">
+                                    Booking Details
+                                </h5>
+                                <Table className="mb-4 w-full text-left text-gray-900 dark:text-gray-300">
+                                    <Table.Head className='text-center'>
+                                        <Table.HeadCell>Start Date</Table.HeadCell>
+                                        <Table.HeadCell>End Date</Table.HeadCell>
+                                        <Table.HeadCell>Status</Table.HeadCell>
+                                        <Table.HeadCell>Payment</Table.HeadCell>
+
+                                    </Table.Head>
+                                    <Table.Body>
+                                        {
+                                            bookingRequest?.map((booking, index) => (
+                                                <Table.Row key={index} className='text-center'>
+                                                    <Table.Cell>
+                                                        {convertDate(booking.dates)}
+                                                    </Table.Cell>
+                                                    <Table.Cell>
+                                                        {convertDate(booking.end_date)}
+                                                    </Table.Cell>
+                                                    <Table.Cell className='flex justify-center' align='center'>
+                                                        <Badge className='flex justify-center' color={booking.status === 1 ? 'success' : booking.status === 2 ? 'failure' : 'warning'}>
+                                                            {booking?.status === 1 ? 'Approved' : booking.status === 2 ? 'Rejected' : "Pending"}
+                                                        </Badge>
+                                                    </Table.Cell>
+                                                    <Table.Cell align='center'>
+                                                        <Button color={'blue'} pill size={'xs'} disabled={booking.status === 1 ? false : booking.status === 2 ? true : true}>
+                                                            Pay Now
+                                                        </Button>
+                                                    </Table.Cell>
+                                                </Table.Row>
+                                            ))
+                                        }
+                                    </Table.Body>
+                                </Table>
+                            </>
+                        )
+
+                    }
 
                     <div className="flex flex-col gap-4 justify-between mt-auto">
-                        <Button onClick={() => navigate(`/user/my-stores/${storeDetails._id}`)} className='w-full' color={'blue'} pill>
+                        <Button onClick={() => navigate(`/user/${isListPage || isRentedStorePage ? 'store' :  'my-stores'}/${storeDetails._id}`, {state: { isRentedStorePage: isRentedStorePage }})} className='w-full' color={'blue'} pill>
                             View Store
                         </Button>
-                        <Button
-                            className='w-full'
-                            color={'gray'}
-                            pill
-                            onClick={() => {
-                                setOpenModal(true);
-                                getStore();
-                            }
-                            }
-                        >
-                            View Bookings ({storeDetails.bookings.length})
-                        </Button>
+                        {
+                            !isListPage && !isRentedStorePage && (
+                                <Button
+                                    className='w-full'
+                                    color={'gray'}
+                                    pill
+                                    onClick={() => {
+                                        setOpenModal(true);
+                                        getStore();
+                                    }
+                                    }
+                                >
+                                    View Bookings ({storeDetails.bookings.length})
+                                </Button>
+                            )
+                        }
+
                     </div>
+                </div>
+                <div className='flex justify-end pr-4'>
+                    <small>Posted At <span className='font-bold'>{getDateAndTimeFromIsoString(storeDetails.createdAt)}</span></small>
                 </div>
             </Card>
         </>

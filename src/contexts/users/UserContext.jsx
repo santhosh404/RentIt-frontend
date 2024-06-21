@@ -1,7 +1,6 @@
 
 import React, { createContext, useContext, useState } from 'react';
 import { getOwnerRequest } from '../../services/users/UserAuthServices';
-import CustomToast from '../../components/reusable/Toast';
 import { toast } from 'react-toastify';
 import { getUser } from '../../services/users/UserCommonServices';
 

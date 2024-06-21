@@ -81,3 +81,19 @@ export const deleteStore = async (id) => {
         throw err
     }
 }
+
+export const bookRequestAction = async (payload) => {
+    try {
+        const response = await instance.put(`/owner/common/booking-request-action`, payload, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`
+            }
+        });
+        if(response) {
+            return response.data;
+        }
+    }
+    catch(err) {
+        throw err
+    }
+}

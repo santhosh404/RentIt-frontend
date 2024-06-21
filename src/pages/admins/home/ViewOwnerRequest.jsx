@@ -4,7 +4,7 @@ import { Badge, Button, Card, Select, Spinner } from 'flowbite-react';
 import { allOwnerRequest, ownerRequestFilter } from '../../../services/admin/AdminCommonServices';
 import { toast } from 'react-toastify';
 import { HiOutlineEye } from 'react-icons/hi';
-import { getDateAndTimeFromUnixTimestamp } from '../../../utils/helper';
+import { getDateAndTimeFromIsoString } from '../../../utils/helper';
 import { useNavigate } from 'react-router-dom';
 
 export default function ViewOwnerRequest() {
@@ -107,7 +107,7 @@ export default function ViewOwnerRequest() {
                                             <div className='flex gap-2 items-start'>
                                                 <div className='flex flex-col'>
                                                     <h5 className="text-xl font-[700]">{ownerRequest.first_name} {ownerRequest.last_name}</h5>
-                                                    <small>{getDateAndTimeFromUnixTimestamp(ownerRequest?.createdAt)}</small>
+                                                    <small>{getDateAndTimeFromIsoString(ownerRequest?.createdAt)}</small>
                                                 </div>
                                                 {getStatusBadge(ownerRequest.is_approved)}
                                             </div>

@@ -2,10 +2,10 @@ import React, { useContext, useEffect, useState } from 'react'
 import CustomNavbar from '../../../components/reusable/Navbar'
 import { UserContext } from '../../../contexts/users/UserContext';
 import { useNavigate } from 'react-router-dom';
-import { Button, Table, Modal, Spinner, Badge } from 'flowbite-react';
-import { HiDotsVertical, HiExclamation, HiExclamationCircle, HiMail, HiOutlineDotsVertical, HiOutlineExclamationCircle, HiOutlineMail, HiOutlineX, HiPlus } from 'react-icons/hi';
+import { Button, Table, Modal, Spinner, Badge, Dropdown, Popover } from 'flowbite-react';
+import { HiDotsVertical, HiExclamation, HiExclamationCircle, HiMail, HiOutlineDotsVertical, HiOutlineExclamationCircle, HiOutlineMail, HiOutlinePlus, HiOutlinePlusCircle, HiOutlineSave, HiOutlineUserAdd, HiOutlineX, HiOutlineXCircle, HiPlus } from 'react-icons/hi';
 import { HiXCircle } from 'react-icons/hi2';
-import { getStoreById } from '../../../services/owners/OwnerCommonServices';
+import { bookRequestAction, getStoreById } from '../../../services/owners/OwnerCommonServices';
 import { toast } from 'react-toastify';
 import StoreCard from '../../../components/users/StoreCard';
 import CustomTable from '../../../components/reusable/Table';
@@ -55,6 +55,20 @@ export default function MyStores() {
     const [openModal, setOpenModal] = useState(false);
     const [tableRow, setTableRow] = useState([]);
 
+
+    const handleAction = async (action, booking) => {
+        console.log(action, booking); // Replace with your action handler
+        try {
+            const response = await bookRequestAction({ booking_id: booking._id, action: action });
+            toast.success(response.message);
+            setOpenModal(false);
+            getMyStores();
+        }
+        catch(err) {
+            toast.error(err?.response?.data?.data?.error || err?.response?.data?.message || err.message);
+        }
+    };
+
     const navigate = useNavigate();
 
     const getMyStores = async () => {
@@ -82,7 +96,7 @@ export default function MyStores() {
     const tableCell = [
         {
             cell: (row, idx) => (
-                <Table.Cell># {idx+1}</Table.Cell>
+                <Table.Cell># {idx + 1}</Table.Cell>
             ),
 
         },
@@ -115,7 +129,7 @@ export default function MyStores() {
         {
             cell: (row) => (
                 <Table.Cell>
-                    <Badge color={row.is_available === 1 ? 'success' : row.is_available === 2 ? 'failure': 'warning'}>
+                    <Badge color={row.is_available === 1 ? 'success' : row.is_available === 2 ? 'failure' : 'warning'}>
                         {row.is_available === 1 ? 'Approved' : row.is_available === 2 ? 'Rejected' : "Pending"}
                     </Badge>
                 </Table.Cell>
@@ -125,7 +139,22 @@ export default function MyStores() {
             cell: (row) => (
                 <Table.Cell>
                     <div className='flex justify-center items-center'>
-                        <HiOutlineDotsVertical className='w-5 h-5 cursor-pointer text-[#000]' />
+                        <Dropdown
+                            className='z-10'
+                            inline
+                            arrowIcon={false}
+                            placement='right'
+                            label={<HiOutlineDotsVertical className='w-5 h-5 cursor-pointer text-[#000]' />}
+                        >
+                            <Dropdown.Item onClick={() => handleAction(1, row)} className='font-[500]'>
+                                <HiOutlinePlus className='w-4 h-4 mr-1' /> Accept
+                            </Dropdown.Item>
+                            <Dropdown.Item onClick={() => handleAction(2, row)} className='font-[500]'>
+                                <HiOutlineX className='w-4 h-4 mr-1' />
+                                Reject
+                            </Dropdown.Item>
+                        </Dropdown>
+
                     </div>
                 </Table.Cell>
             ),
@@ -136,7 +165,7 @@ export default function MyStores() {
     return (
         <>
             <CustomNavbar />
-            <div className='max-w-[1200px] mx-auto mt-20'>
+            <div className='max-w-[1000px] mx-auto mt-20'>
                 {
                     loading ? (
                         <div className='flex justify-center items-center'>
@@ -191,7 +220,7 @@ export default function MyStores() {
                                                                     <h1 className='font-bold'>No stores found</h1>
                                                                 </div>
                                                             ) : (
-                                                                <div className='flex justify-center gap-3 my-10 flex-wrap items-center'>
+                                                                <div className='w-full flex justify-center gap-3 my-10 flex-wrap items-center'>
                                                                     {
                                                                         myStore?.map((store, idx) => (
                                                                             <StoreCard
