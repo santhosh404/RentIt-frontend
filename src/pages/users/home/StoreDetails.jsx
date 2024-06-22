@@ -402,6 +402,7 @@ export default function StoreDetails() {
                             tableHead={tableHead}
                             tableRow={tableRow}
                             tableCell={tableCell}
+                            shadow={'sm'}
                         />
                     </Modal.Body>
                     {/* <Modal.Footer className='flex justify-end'>

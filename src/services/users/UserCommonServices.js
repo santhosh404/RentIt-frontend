@@ -98,3 +98,31 @@ export const paymentVerification = async (payload) => {
         throw err
     }
 }
+
+export const updatePaymentOnSuccess = async (payload) => {
+    try {
+        const response = await instance.put('/user/common/update-payment', payload, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`
+            }
+        })
+        return response.data;
+    }
+    catch (err) {
+        throw err
+    }
+}
+
+export const bookingLogs = async () => {
+    try {
+        const response = await instance.get('/user/common/booking-logs', {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`
+            }
+        })
+        return response.data;
+    }
+    catch (err) {
+        throw err
+    }
+}

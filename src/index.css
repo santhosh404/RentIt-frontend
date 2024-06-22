@@ -3,21 +3,30 @@
 @tailwind utilities;
 
 .rti--container .rti--input:focus {
-    outline: none !important;
-    box-shadow: none !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .rti--container .rti--input {
-    font-size: 0.875rem;
-    line-height: 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
 }
 
 .animate-spin {
-    animation: spin .3s linear infinite !important;
+  animation: spin 0.3s linear infinite !important;
 }
 
 .blur {
-    background-color: rgb(255 255 255 / 30%);
-    backdrop-filter: blur(10px);
-    position: relative;
-}   
+  background-color: rgb(255 255 255 / 30%);
+  backdrop-filter: blur(10px);
+  position: relative;
+}
+
+.line-clamp-2 {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+}

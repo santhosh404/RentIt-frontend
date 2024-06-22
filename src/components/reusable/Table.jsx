@@ -1,11 +1,13 @@
-import { Table } from 'flowbite-react'
+import { Flowbite } from "flowbite-react";
+import { Table } from 'flowbite-react';
 import React from 'react'
 
-export default function CustomTable({ tableHead, tableRow, tableCell }) {
+export default function CustomTable({ tableHead, tableRow, tableCell, shadow }) {
+
     return (
         <>
-            <div className="overflow-x-auto">
-                <Table>
+            <div className={`overflow-x-auto ${shadow && `shadow-${shadow}`} rounded-md`}>
+                <Table className='shadow-md'>
                     <Table.Head>
                         {
                             tableHead?.map((item, index) => {

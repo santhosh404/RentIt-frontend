@@ -201,7 +201,7 @@ export default function MyStores() {
                                             <>
                                                 <div className='flex items-center justify-between'>
                                                     <div className='flex flex-col gap-2'>
-                                                        <h1 className='font-[900] text-[23px]'>My Stores</h1>
+                                                        <h1 className='font-[900] text-[23px]'>My Stores ({myStore?.length})</h1>
                                                         <p>You're now approved owner. Now you can start posting your property or Store for rent</p>
                                                     </div>
                                                     <div>
@@ -253,6 +253,7 @@ export default function MyStores() {
                         tableHead={tableHead}
                         tableRow={tableRow}
                         tableCell={tableCell}
+                        shadow={'sm'}
                     />
                 </Modal.Body>
                 <Modal.Footer className='flex justify-end'>

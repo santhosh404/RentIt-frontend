@@ -71,7 +71,7 @@ export default function UserHomePage() {
       <CustomNavbar />
       <div className='max-w-[1000px] mx-auto mt-20'>
         <div className='flex justify-between items-center'>
-          <h1 className='font-[900] text-[23px]'>Stores</h1>
+          <h1 className='font-[900] text-[23px]'>Stores ({store?.length})</h1>
           <Tooltip content='Apply Filters'>
             <div className='relative w-10'>
               <HiOutlineFilter onClick={() => setIsOpen(true)} className='w-6 h-6 cursor-pointer' />
