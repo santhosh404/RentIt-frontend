@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { getStoreByStoreId } from '../../services/owners/OwnerCommonServices';
 import { toast } from 'react-toastify';
 import { HiOutlineEye } from 'react-icons/hi';
-import { makePayment, paymentVerification, updatePaymentOnSuccess } from '../../services/users/UserCommonServices';
+import { makePayment, updatePaymentOnSuccess } from '../../services/users/UserCommonServices';
 
 export default function StoreCard({ storeDetails, bookingRequest, setOpenModal, setTableRow, isListPage, isRentedStorePage }) {
 

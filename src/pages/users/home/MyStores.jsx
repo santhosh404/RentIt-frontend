@@ -57,14 +57,13 @@ export default function MyStores() {
 
 
     const handleAction = async (action, booking) => {
-        console.log(action, booking); // Replace with your action handler
         try {
             const response = await bookRequestAction({ booking_id: booking._id, action: action });
             toast.success(response.message);
             setOpenModal(false);
             getMyStores();
         }
-        catch(err) {
+        catch (err) {
             toast.error(err?.response?.data?.data?.error || err?.response?.data?.message || err.message);
         }
     };
@@ -129,8 +128,8 @@ export default function MyStores() {
         {
             cell: (row) => (
                 <Table.Cell>
-                    <Badge color={row.is_available === 1 ? 'success' : row.is_available === 2 ? 'failure' : 'warning'}>
-                        {row.is_available === 1 ? 'Approved' : row.is_available === 2 ? 'Rejected' : "Pending"}
+                    <Badge color={row.is_available === 1 ? 'success' : row.is_available === 2 ? 'failure' : row.is_available === 3 ? 'success' : 'warning'}>
+                        {row.is_available === 1 ? 'Approved' : row.is_available === 2 ? 'Rejected' : row.is_available === 3 ? 'Booked' : "Pending"}
                     </Badge>
                 </Table.Cell>
             ),
@@ -139,22 +138,27 @@ export default function MyStores() {
             cell: (row) => (
                 <Table.Cell>
                     <div className='flex justify-center items-center'>
-                        <Dropdown
-                            className='z-10'
-                            inline
-                            arrowIcon={false}
-                            placement='right'
-                            label={<HiOutlineDotsVertical className='w-5 h-5 cursor-pointer text-[#000]' />}
-                        >
-                            <Dropdown.Item onClick={() => handleAction(1, row)} className='font-[500]'>
-                                <HiOutlinePlus className='w-4 h-4 mr-1' /> Accept
-                            </Dropdown.Item>
-                            <Dropdown.Item onClick={() => handleAction(2, row)} className='font-[500]'>
-                                <HiOutlineX className='w-4 h-4 mr-1' />
-                                Reject
-                            </Dropdown.Item>
-                        </Dropdown>
-
+                        {
+                            row.is_available === 3 ? (
+                                "None"
+                            ) : (
+                                <Dropdown
+                                    className='z-10'
+                                    inline
+                                    arrowIcon={false}
+                                    placement='right'
+                                    label={<HiOutlineDotsVertical className='w-5 h-5 cursor-pointer text-[#000]' />}
+                                >
+                                    <Dropdown.Item onClick={() => handleAction(1, row)} className='font-[500]'>
+                                        <HiOutlinePlus className='w-4 h-4 mr-1' /> Accept
+                                    </Dropdown.Item>
+                                    <Dropdown.Item onClick={() => handleAction(2, row)} className='font-[500]'>
+                                        <HiOutlineX className='w-4 h-4 mr-1' />
+                                        Reject
+                                    </Dropdown.Item>
+                                </Dropdown>
+                            )
+                        }
                     </div>
                 </Table.Cell>
             ),

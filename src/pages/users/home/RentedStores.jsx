@@ -36,7 +36,7 @@ export default function RentedStores() {
             <div className='max-w-[1000px] mx-auto mt-20'>
                 <div className='flex'>
                     <div className='flex flex-col gap-2'>
-                        <h1 className='font-[900] text-[23px]'>Rented Stores</h1>
+                        <h1 className='font-[900] text-[23px]'>Rented Stores ({rentedStores?.length})</h1>
                         <p>See the rented request details that you have made</p>
                     </div>
                 </div>

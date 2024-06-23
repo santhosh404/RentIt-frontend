@@ -12,7 +12,7 @@ export default function PaymentSuccess() {
                     <h2 className="text-2xl font-semibold text-center mt-4 mb-2">Payment Successful!</h2>
                     <p className="text-gray-600 text-center mb-6">Thank you for your purchase.</p>
                     <div className="text-center">
-                        <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" onClick={() => navigate('/user/home')}>Back to Home</button>
+                        <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" onClick={() => navigate('/user/booking-logs')}>Back to Home</button>
                     </div>
                 </div>
             </div>
