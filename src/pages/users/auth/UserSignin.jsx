@@ -42,6 +42,7 @@ export default function UserSignin() {
                 if (response) {
                     setLoading(false)
                     sessionStorage.setItem('token', response.data.token)
+                    sessionStorage.setItem('user', JSON.stringify(response.data.user))
                     navigate('/user/home')
                 }
             }

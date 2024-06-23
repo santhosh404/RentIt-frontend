@@ -49,7 +49,14 @@ export default function SignInComponent({ formTitle, loading, formik, error }) {
                     </div>
                     <div className='flex justify-end gap-2 items-center'>
                         <p>Don't Have an Account?</p>
-                        <p><Link to={'/user/sign-up'} className='text-[blue]'>Signup</Link></p>
+                        {
+                            formTitle === 'Admin Signin' ? (
+                                <p><Link to={'/admin/sign-up'} className='text-[blue]'>Signup</Link></p>
+                            ) : (
+                                <p><Link to={'/user/sign-up'} className='text-[blue]'>Signup</Link></p>
+                            )
+                        }
+
                     </div>
                     <Button gradientDuoTone="purpleToBlue" type="submit" disabled={loading}>
                         {

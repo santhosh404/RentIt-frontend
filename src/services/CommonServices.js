@@ -3,11 +3,7 @@ import { instance } from "../services/instance";
 
 export const getStates = async () => {
     try {
-        const response = await instance.get('/common/states', {
-            headers: {
-                Authorization: `Bearer ${sessionStorage.getItem('token')}`
-            }
-        });
+        const response = await instance.get('/common/states');
         if(response) {
             return response.data;
         }

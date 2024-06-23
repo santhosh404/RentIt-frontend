@@ -28,7 +28,7 @@ function App() {
             userProtectedRoutes.map((userRoute, idx) => <Route key={idx} path={userRoute.path} element={<userRoute.element />} />)
           }
         </Route>
-        <Route path='/' element={<Navigate to={'/user/sign-in'} />} />
+        <Route path='/' element={<Navigate to={'/user/home'} />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
       <ToastContainer />

@@ -170,8 +170,8 @@ export default function StoreCard({ storeDetails, bookingRequest, setOpenModal, 
                                                         {convertDate(booking.end_date)}
                                                     </Table.Cell>
                                                     <Table.Cell className='flex justify-center' align='center'>
-                                                        <Badge className='flex justify-center' color={booking.status === 1 ? 'success' : booking.status === 2 ? 'failure' : booking.status === 4 ? "success" : 'warning'}>
-                                                            {booking?.status === 1 ? 'Approved' : booking.status === 2 ? 'Rejected' : booking.status === 4 ? 'Booked' : "Pending"}
+                                                        <Badge className='flex justify-center' color={booking.status === 1 ? 'success' : booking.status === 2 ? 'failure' : booking.status === 3 ? "success" : 'warning'}>
+                                                            {booking?.status === 1 ? 'Approved' : booking.status === 2 ? 'Rejected' : booking.status === 3 ? 'Booked' : "Pending"}
                                                         </Badge>
                                                     </Table.Cell>
                                                     <Table.Cell align='center'>

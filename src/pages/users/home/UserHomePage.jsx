@@ -17,9 +17,12 @@ export default function UserHomePage() {
   const [isOpen, setIsOpen] = useState(false);
   const [filters, setFilters] = useState({
     keywords: '',
-    location: '',
+    state: 'Choose state',
+    district: 'Choose district',
     specification: '',
-    availability: 'all',
+    rentPerMonth: [],
+    squareFeet: [],
+    totalFiltersApplied: 0
   });
   const [districts, setDistricts] = useState([]);
 
@@ -48,9 +51,11 @@ export default function UserHomePage() {
   }
 
   useEffect(() => {
-    getUserById()
-    getAllStores()
+    if (sessionStorage.getItem('token') && sessionStorage.getItem('user')) {
+      getUserById()
+    }
     getAllStates();
+    getAllStores()
   }, [])
 
   const handleStateOnChange = async (e) => {
@@ -66,6 +71,111 @@ export default function UserHomePage() {
       toast.error(error?.response?.data?.data?.error || error.message)
     }
   }
+
+  const handleCheckboxChange = (e) => {
+    const { id, checked } = e.target;
+    let updatedRentPerMonth = [...filters.rentPerMonth];
+    let updatedSquareFeet = [...filters.squareFeet];
+
+    switch (id) {
+      case 'rent-0-10000':
+        updatedRentPerMonth = checked
+          ? [...updatedRentPerMonth, [0, 10000]]
+          : updatedRentPerMonth.filter(range => range[0] !== 0 || range[1] !== 10000);
+        break;
+      case 'rent-10000-20000':
+        updatedRentPerMonth = checked
+          ? [...updatedRentPerMonth, [10000, 20000]]
+          : updatedRentPerMonth.filter(range => range[0] !== 10000 || range[1] !== 20000);
+        break;
+      case 'rent-20000-50000':
+        updatedRentPerMonth = checked
+          ? [...updatedRentPerMonth, [20000, 50000]]
+          : updatedRentPerMonth.filter(range => range[0] !== 20000 || range[1] !== 50000);
+        break;
+      case 'rent-50000-70000':
+        updatedRentPerMonth = checked
+          ? [...updatedRentPerMonth, [50000, 70000]]
+          : updatedRentPerMonth.filter(range => range[0] !== 50000 || range[1] !== 70000);
+        break;
+      case 'rent-70000-100000':
+        updatedRentPerMonth = checked
+          ? [...updatedRentPerMonth, [70000, 100000]]
+          : updatedRentPerMonth.filter(range => range[0] !== 70000 || range[1] !== 100000);
+        break;
+      case 'sqft-0-5000':
+        updatedSquareFeet = checked
+          ? [...updatedSquareFeet, [0, 5000]]
+          : updatedSquareFeet.filter(range => range[0] !== 0 || range[1] !== 5000);
+        break;
+      case 'sqft-5000-10000':
+        updatedSquareFeet = checked
+          ? [...updatedSquareFeet, [5000, 10000]]
+          : updatedSquareFeet.filter(range => range[0] !== 5000 || range[1] !== 10000);
+        break;
+      case 'sqft-10000-20000':
+        updatedSquareFeet = checked
+          ? [...updatedSquareFeet, [10000, 20000]]
+          : updatedSquareFeet.filter(range => range[0] !== 10000 || range[1] !== 20000);
+        break;
+      default:
+        break;
+    }
+
+    setFilters(prev => ({
+      ...prev,
+      rentPerMonth: updatedRentPerMonth,
+      squareFeet: updatedSquareFeet
+    }));
+  };
+
+
+  const handleApplyFilters = async () => {
+    let count = 0;
+
+    if (filters.keywords) count++;
+    if (filters.state !== 'Choose state') count++;
+    if (filters.district !== 'Choose district') count++;
+    if (filters.specification) count++;
+    if (filters.rentPerMonth.length > 0) count++;
+    if (filters.squareFeet.length > 0) count++;
+    setFilters(prev => ({ ...prev, totalFiltersApplied: count }));
+    setIsOpen(false);
+    try {
+      const response = await allStores(filters);
+      if (response) {
+        setStore(response.data.rentalStores);
+      }
+    }
+    catch (err) {
+      toast.error(err?.response?.data?.data?.error || err?.response?.data?.message || err.message);
+    }
+
+  }
+
+
+  const handleClearFilter = async () => {
+    setFilters({
+      keywords: [],
+      state: 'Choose state',
+      district: 'Choose district',
+      specification: '',
+      rentPerMonth: [],
+      squareFeet: [],
+      totalFiltersApplied: 0
+    })
+    setIsOpen(false)
+    try {
+      const response = await allStores();
+      if (response) {
+        setStore(response.data.rentalStores);
+      }
+    }
+    catch (err) {
+      toast.error(err?.response?.data?.data?.error || err?.response?.data?.message || err.message);
+    }
+  }
+
   return (
     <>
       <CustomNavbar />
@@ -75,7 +185,7 @@ export default function UserHomePage() {
           <Tooltip content='Apply Filters'>
             <div className='relative w-10'>
               <HiOutlineFilter onClick={() => setIsOpen(true)} className='w-6 h-6 cursor-pointer' />
-              <Badge color={'success'} className='rounded-full font-bold absolute right-0 top-[-10px]'>2</Badge>
+              <Badge color={'success'} className='rounded-full font-bold absolute right-0 top-[-10px]'>{filters.totalFiltersApplied}</Badge>
             </div>
 
           </Tooltip>
@@ -166,7 +276,7 @@ export default function UserHomePage() {
                   id="district"
                   className='w-full'
                   value={filters.district}
-                  onChange={handleChange}
+                  onChange={(e) => setFilters(prev => ({ ...prev, district: e.target.value }))}
                 >
                   <option selected disabled>Choose district</option>
                   {
@@ -240,55 +350,59 @@ export default function UserHomePage() {
                 </Label>
                 <div className="flex flex-col gap-2">
                   <div className='flex items-center gap-2'>
-                    <Checkbox id="accept" />
-                    <Label htmlFor="accept" className="flex">
-                      ₹ 10, 000 - ₹ 20, 000
+                    <Checkbox id="rent-0-10000" onChange={handleCheckboxChange}  checked={filters.rentPerMonth.some(range => range[0] === 0 && range[1] === 10000)} />
+                    <Label htmlFor="rent-0-10000" className="flex">
+                      ₹ 0 - ₹ 10,000
                     </Label>
                   </div>
                   <div className='flex items-center gap-2'>
-                    <Checkbox id="accept" />
-                    <Label htmlFor="accept" className="flex">
-                      ₹ 20, 000 - ₹ 50, 000
+                    <Checkbox id="rent-10000-20000" onChange={handleCheckboxChange}  checked={filters.rentPerMonth.some(range => range[0] === 10000 && range[1] === 20000)} />
+                    <Label htmlFor="rent-10000-20000" className="flex">
+                      ₹ 10,000 - ₹ 20,000
                     </Label>
                   </div>
                   <div className='flex items-center gap-2'>
-                    <Checkbox id="accept" />
-                    <Label htmlFor="accept" className="flex">
-                      ₹ 50, 000 - ₹ 70, 000
+                    <Checkbox id="rent-20000-50000" onChange={handleCheckboxChange}  checked={filters.rentPerMonth.some(range => range[0] === 20000 && range[1] === 50000)} />
+                    <Label htmlFor="rent-20000-50000" className="flex">
+                      ₹ 20,000 - ₹ 50,000
                     </Label>
                   </div>
                   <div className='flex items-center gap-2'>
-                    <Checkbox id="accept" />
-                    <Label htmlFor="accept" className="flex">
-                      ₹ 70, 000 - ₹ 1, 00, 000
+                    <Checkbox id="rent-50000-70000" onChange={handleCheckboxChange}  checked={filters.rentPerMonth.some(range => range[0] === 50000 && range[1] === 70000)} />
+                    <Label htmlFor="rent-50000-70000" className="flex">
+                      ₹ 50,000 - ₹ 70,000
                     </Label>
                   </div>
-
-
+                  <div className='flex items-center gap-2'>
+                    <Checkbox id="rent-70000-100000" onChange={handleCheckboxChange}  checked={filters.rentPerMonth.some(range => range[0] === 70000 && range[1] === 100000)} />
+                    <Label htmlFor="rent-70000-100000" className="flex">
+                      ₹ 70,000 - ₹ 1,00,000
+                    </Label>
+                  </div>
                 </div>
-
               </div>
+
               <div className='mb-2'>
                 <Label htmlFor="location" className="mb-2 block">
                   Square Feet
                 </Label>
                 <div className="flex flex-col gap-2">
-                  <div className='flex items-center gap-2'>
-                    <Checkbox id="accept" />
-                    <Label htmlFor="accept" className="flex">
-                      0 sq feet -  5, 000 sq feet
+                  <div className='flex items-center gap-2'> 
+                    <Checkbox id="sqft-0-5000" onChange={handleCheckboxChange}  checked={filters.squareFeet.some(range => range[0] === 0 && range[1] === 5000)} />
+                    <Label htmlFor="sqft-0-5000" className="flex">
+                      0 sq feet - 5,000 sq feet
                     </Label>
                   </div>
                   <div className='flex items-center gap-2'>
-                    <Checkbox id="accept" />
-                    <Label htmlFor="accept" className="flex">
-                      5, 000 sq feet -  10, 000 sq feet
+                    <Checkbox id="sqft-5000-10000" onChange={handleCheckboxChange} checked={filters.squareFeet.some(range => range[0] === 5000 && range[1] === 10000)} />
+                    <Label htmlFor="sqft-5000-10000" className="flex">
+                      5,000 sq feet - 10,000 sq feet
                     </Label>
                   </div>
                   <div className='flex items-center gap-2'>
-                    <Checkbox id="accept" />
-                    <Label htmlFor="accept" className="flex">
-                      10, 000 sq feet -  20, 000 sq feet
+                    <Checkbox id="sqft-10000-20000" onChange={handleCheckboxChange} checked={filters.squareFeet.some(range => range[0] === 10000 && range[1] === 20000)} />
+                    <Label htmlFor="sqft-10000-20000" className="flex">
+                      10,000 sq feet - 20,000 sq feet
                     </Label>
                   </div>
                 </div>
@@ -297,13 +411,13 @@ export default function UserHomePage() {
               <div className="grid grid-cols-2 gap-4">
                 <Button
                   color={'gray'}
-                  onClick={handleClose}
+                  onClick={handleClearFilter}
                 >
                   Clear Filter
                 </Button>
                 <Button
                   color={'blue'}
-                  onClick={() => console.log('Filters applied:', filters)}
+                  onClick={handleApplyFilters}
                 >
                   Apply Filters
 

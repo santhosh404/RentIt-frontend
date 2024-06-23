@@ -26,6 +26,10 @@ export const userCommonRoutes = [
         path: '/user/sign-in',
         element: UserSignin
     },
+    {
+        path: '/user/home',
+        element: UserHomePage
+    },
     // {
     //     path: '/user/forgot-password',
     //     element: UserForgotPassword
@@ -38,10 +42,7 @@ export const userCommonRoutes = [
 ]
 
 export const userProtectedRoutes = [
-    {
-        path: '/user/home',
-        element: UserHomePage
-    },
+    
     {
         path: '/user/rented-stores',
         element: RentedStores

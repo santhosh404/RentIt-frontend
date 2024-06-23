@@ -68,8 +68,8 @@ export default function StoreDetails() {
         {
             cell: (row) => (
                 <Table.Cell className='flex justify-center'>
-                    <Badge className='flex justify-center' color={row.is_available === 1 ? 'success' : row.is_available === 2 ? 'failure' : 'warning'}>
-                        {row?.is_available === 1 ? 'Approved' : row.is_available === 2 ? 'Rejected' : "Pending"}
+                    <Badge className='flex justify-center' color={row.is_available === 1 ? 'success' : row.is_available === 2 ? 'failure' : row.is_available === 3 ? 'success' : 'warning'}>
+                        {row?.is_available === 1 ? 'Approved' : row.is_available === 2 ? 'Rejected' : row.is_available === 3 ? 'Booked' : "Pending"}
                     </Badge>
                 </Table.Cell>
             ),
@@ -78,7 +78,7 @@ export default function StoreDetails() {
             cell: (row) => (
                 <Table.Cell>
                     <div className='flex justify-center items-center'>
-                        <p className='font-bold w-[200px]'>{row?.is_available === 1 ? 'Store with dates are aceepted and awaiting payment' : row.is_available === 2 ? 'Booking was rejected by owner' : "Awaiting action from owner"}</p>
+                        <p className='font-bold w-[200px]'>{row?.is_available === 1 ? 'Store with dates are aceepted and awaiting payment' : row.is_available === 2 ? 'Booking was rejected by owner' : row?.is_available === 3 ? 'Store was booked with successfull payment':"Awaiting action from owner"}</p>
                     </div>
                 </Table.Cell>
             ),
