@@ -10,6 +10,7 @@ import CustomTable from '../../../components/reusable/Table';
 import { useFormik } from 'formik';
 import { bookStoreValidationSchema } from '../../../utils/ValidationSchema';
 import { bookingRequest } from '../../../services/users/UserCommonServices';
+import { AiOutlineLoading } from 'react-icons/ai';
 
 const tableHead = [
     "S.no",
@@ -24,6 +25,7 @@ export default function StoreDetails() {
     const [openModal, setOpenModal] = useState(false);
     const [bookNowModal, setBookNowModal] = useState(false);
     const [tableRow, setTableRow] = useState([]);
+    const [loading, setLoading] = useState(false);
     const { id } = useParams()
     const navigate = useNavigate()
 
@@ -78,7 +80,7 @@ export default function StoreDetails() {
             cell: (row) => (
                 <Table.Cell>
                     <div className='flex justify-center items-center'>
-                        <p className='font-bold w-[200px]'>{row?.is_available === 1 ? 'Store with dates are aceepted and awaiting payment' : row.is_available === 2 ? 'Booking was rejected by owner' : row?.is_available === 3 ? 'Store was booked with successfull payment':"Awaiting action from owner"}</p>
+                        <p className='font-bold w-[200px]'>{row?.is_available === 1 ? 'Store with dates are aceepted and awaiting payment' : row.is_available === 2 ? 'Booking was rejected by owner' : row?.is_available === 3 ? 'Store was booked with successfull payment' : "Awaiting action from owner"}</p>
                     </div>
                 </Table.Cell>
             ),
@@ -94,6 +96,7 @@ export default function StoreDetails() {
         validationSchema: bookStoreValidationSchema,
         onSubmit: async (values) => {
             try {
+                setLoading(true)
                 const response = await bookingRequest({ ...values, rent_store_id: id });
                 if (response) {
                     toast.success(response.message);
@@ -101,9 +104,11 @@ export default function StoreDetails() {
                     setBookNowModal(false);
                     getStoreById(id);
                     navigate('/user/rented-stores')
+                    setLoading(false)
                 }
             }
             catch (err) {
+                setLoading(false)
                 toast.error(err?.response?.data?.data?.error || err?.response?.data?.message || err.message);
             }
         }
@@ -123,7 +128,7 @@ export default function StoreDetails() {
                                     setOpenModal(true);
                                     getStoreById(id);
                                 }}>View Availability</Button>
-                                <Button pill color={'blue'} onClick={() => {
+                                <Button pill color={'blue'}  onClick={() => {
                                     setBookNowModal(true);
                                 }}>Book Now</Button>
 
@@ -455,8 +460,8 @@ export default function StoreDetails() {
                             </div>
                         </Modal.Body>
                         <Modal.Footer className='flex justify-end'>
-                            <Button type='submit' color="blue" pill>
-                                <HiOutlineTicket className='w-5 h-5 mr-1' />
+                            <Button type='submit' color="blue" pill isProcessing={loading} processingSpinner={<AiOutlineLoading className='h-4 w-4 mr-2 animate-spin' />}>
+                                
                                 Book Now
                             </Button>
                         </Modal.Footer>

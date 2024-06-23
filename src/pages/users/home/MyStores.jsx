@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import StoreCard from '../../../components/users/StoreCard';
 import CustomTable from '../../../components/reusable/Table';
 import { capitalizeAndConcat, convertDate } from '../../../utils/helper';
+import { AiOutlineLoading } from 'react-icons/ai';
 
 
 const tableHead = [
@@ -54,17 +55,55 @@ export default function MyStores() {
     const [storeDataLoading, setStoreDataLoading] = useState(false);
     const [openModal, setOpenModal] = useState(false);
     const [tableRow, setTableRow] = useState([]);
+    const [btnLoading, setBtnLoading] = useState({
+        approveLoading: false,
+        rejectLoading: false
+    });
 
 
     const handleAction = async (action, booking) => {
+        if (action === 1) {
+            setBtnLoading((prevState) => ({
+                ...prevState,
+                approveLoading: true
+            }));
+        } else {
+            setBtnLoading((prevState) => ({
+                ...prevState,
+                rejectLoading: true
+            }));
+        }
         try {
             const response = await bookRequestAction({ booking_id: booking._id, action: action });
             toast.success(response.message);
             setOpenModal(false);
             getMyStores();
+            if (action === 1) {
+                setBtnLoading((prevState) => ({
+                    ...prevState,
+                    approveLoading: false
+                }));
+            } else {
+                setBtnLoading((prevState) => ({
+                    ...prevState,
+                    rejectLoading: false
+                }));
+            }
         }
         catch (err) {
             toast.error(err?.response?.data?.data?.error || err?.response?.data?.message || err.message);
+            if (action === 1) {
+                setBtnLoading((prevState) => ({
+                    ...prevState,
+                    approveLoading: false
+                }));
+            } else {
+                setBtnLoading((prevState) => ({
+                    ...prevState,
+                    rejectLoading: false
+                }));
+            }
+
         }
     };
 
@@ -148,12 +187,19 @@ export default function MyStores() {
                                     arrowIcon={false}
                                     placement='right'
                                     label={<HiOutlineDotsVertical className='w-5 h-5 cursor-pointer text-[#000]' />}
+                                    dismissOnClick={false}
                                 >
                                     <Dropdown.Item onClick={() => handleAction(1, row)} className='font-[500]'>
-                                        <HiOutlinePlus className='w-4 h-4 mr-1' /> Accept
+                                        {
+                                            btnLoading.approveLoading ? <AiOutlineLoading className="h-4 w-4 mr-2 animate-spin" /> : <HiOutlinePlus className='w-4 h-4 mr-1' />
+                                        }
+                                        Accept
                                     </Dropdown.Item>
                                     <Dropdown.Item onClick={() => handleAction(2, row)} className='font-[500]'>
-                                        <HiOutlineX className='w-4 h-4 mr-1' />
+
+                                        {
+                                            btnLoading.rejectLoading ? <AiOutlineLoading className="h-4 w-4 mr-2 animate-spin" /> : <HiOutlineX className='w-4 h-4 mr-1' />
+                                        }
                                         Reject
                                     </Dropdown.Item>
                                 </Dropdown>
