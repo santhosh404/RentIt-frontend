@@ -1,6 +1,24 @@
+@import url("https://fonts.googleapis.com/css2?family=Playwrite+ES+Deco:wght@100..400&family=Quicksand:wght@300..700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+  font-family: "Quicksand", sans-serif !important;
+  font-weight: 500 !important;
+}
+
+body {
+  background-color: rgb(167 230 255 / 5%);
+}
+
+.navbar-bg {
+  background-color: #d9f2fd !important;
+}
+
+.store-name {
+  font-family: "Playwrite ES Deco", cursive !important;
+}
 
 .rti--container .rti--input:focus {
   outline: none !important;

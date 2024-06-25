@@ -41,7 +41,7 @@ export default function AdminSignIn() {
                     setLoading(false)
                     sessionStorage.setItem('token', response.data.token)
                     sessionStorage.setItem('user', JSON.stringify(response.data.user))
-                    navigate('/admin/home')
+                    navigate('/admin/owner-request')
                 }
             }
             catch (err) {

@@ -13,7 +13,7 @@ export default function SignInComponent({ formTitle, loading, formik, error }) {
                 <div className='flex gap-2 items-center'>
                     {/* <img src={wave} className="mr-1 h-10 sm:h-14" alt="Flowbite React Logo" /> */}
                     <div className='flex flex-col'>
-                        <span className="whitespace-nowrap text-[30px] font-[900] dark:text-white">RentIt</span>
+                        <span className="whitespace-nowrap text-[30px] font-[900] dark:text-white store-name">RentIt</span>
                         <small>Rent The Store And Grow Your Business!</small>
                     </div>
                 </div>

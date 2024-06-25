@@ -262,7 +262,7 @@ export default function StoreDetails() {
                         <Card className='p-5'>
                             <div className='w-full gap-5 flex justify-between'>
                                 <div className='w-[30%]'>
-                                    <Label>Rate Per Month</Label>
+                                    <Label>Rent / Month</Label>
                                     <TextInput
                                         type='number'
                                         name='rate'

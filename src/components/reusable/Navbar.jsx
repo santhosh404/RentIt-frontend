@@ -24,10 +24,10 @@ export default function CustomNavbar() {
     }, [])
     return (
         <>
-            <Navbar fluid rounded className='border-b-2 p-4 sticky top-0 z-[1]' id='navbar'>
+            <Navbar fluid rounded className='border-b-2 p-4 sticky top-0 z-[1] navbar-bg' id='navbar'>
                 <Navbar.Brand onClick={() => navigate('/user/home')} className='cursor-pointer'>
                     <div className='flex flex-col'>
-                        <span className="whitespace-nowrap text-[30px] font-[900] dark:text-white">RentIt</span>
+                        <span className="whitespace-nowrap text-[30px] font-[900] dark:text-white store-name">RentIt</span>
                         <small>Rent The Store And Grow Your Business!</small>
                     </div>
                 </Navbar.Brand>

@@ -22,10 +22,10 @@ export default function AdminNavbar() {
     }, [])
     return (
         <>
-            <Navbar fluid rounded className='border-b-2 p-4 sticky top-0 z-[999]' id='navbar'>
-                <Navbar.Brand onClick={() => navigate('/admin/home')} className='cursor-pointer'>
+            <Navbar gradientDuoTone="purpleToBlue" fluid rounded className='border-b-2 p-4 sticky top-0 z-[999] navbar-bg' id='navbar'>
+                <Navbar.Brand onClick={() => navigate('/admin/owner-request')} className='cursor-pointer'>
                     <div className='flex flex-col'>
-                        <span className="whitespace-nowrap text-[30px] font-[900] dark:text-white">RentIt</span>
+                        <span className="whitespace-nowrap text-[30px] font-[900] dark:text-white store-name">RentIt</span>
                         <small>Rent The Store And Grow Your Business!</small>
                     </div>
                 </Navbar.Brand>
@@ -54,14 +54,14 @@ export default function AdminNavbar() {
                                 <HiArrowCircleDown className='w-4 h-4 mr-2' />
                                 Owner Requests
                             </Dropdown.Item>
-                            <Dropdown.Item>
+                            {/* <Dropdown.Item>
                                 <HiMiniUsers className='w-4 h-4 mr-2' />
                                 Users
                             </Dropdown.Item>
                             <Dropdown.Item>
                                 <HiUser className='w-4 h-4 mr-2' />
                                 Owners
-                            </Dropdown.Item>
+                            </Dropdown.Item> */}
                             <Dropdown.Divider />
                             <Dropdown.Item onClick={handleSignOut}>
                                 <HiLogout className='w-4 h-4 mr-2' />
