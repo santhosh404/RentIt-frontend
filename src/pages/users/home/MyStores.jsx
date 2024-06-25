@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import CustomNavbar from '../../../components/reusable/Navbar'
 import { UserContext } from '../../../contexts/users/UserContext';
 import { useNavigate } from 'react-router-dom';
-import { Button, Table, Modal, Spinner, Badge, Dropdown, Popover } from 'flowbite-react';
+import { Button, Table, Modal, Spinner, Badge, Dropdown, Popover, TextInput, Label } from 'flowbite-react';
 import { HiDotsVertical, HiExclamation, HiExclamationCircle, HiMail, HiOutlineDotsVertical, HiOutlineExclamationCircle, HiOutlineMail, HiOutlinePlus, HiOutlinePlusCircle, HiOutlineSave, HiOutlineUserAdd, HiOutlineX, HiOutlineXCircle, HiPlus } from 'react-icons/hi';
 import { HiXCircle } from 'react-icons/hi2';
 import { bookRequestAction, getStoreById } from '../../../services/owners/OwnerCommonServices';
@@ -11,6 +11,7 @@ import StoreCard from '../../../components/users/StoreCard';
 import CustomTable from '../../../components/reusable/Table';
 import { capitalizeAndConcat, convertDate } from '../../../utils/helper';
 import { AiOutlineLoading } from 'react-icons/ai';
+import { useFormik } from 'formik';
 
 
 const tableHead = [
@@ -59,9 +60,23 @@ export default function MyStores() {
         approveLoading: false,
         rejectLoading: false
     });
+    const [row, setRow] = useState({});
+    const [showMinimumAdvanceModal, setShowMinimumAdvanceModal] = useState(false);
+    const [minimumAdvanceValue, setMinimumAdvanceValue] = useState('')
+    const [minimumAdvanceError, setMinimumAdvanceError] = useState({
+        state: false,
+        message: ''
+    });
 
 
-    const handleAction = async (action, booking) => {
+    const handleAction = async (action, booking, minimumAdvanceAmount) => {
+        if (!minimumAdvanceAmount) {
+            setMinimumAdvanceError((prevState) => ({
+                state: true,
+                message: "Minimum advance amount is required"
+            }));
+            return;
+        }
         if (action === 1) {
             setBtnLoading((prevState) => ({
                 ...prevState,
@@ -74,9 +89,13 @@ export default function MyStores() {
             }));
         }
         try {
-            const response = await bookRequestAction({ booking_id: booking._id, action: action });
+            const response = await bookRequestAction({ booking_id: booking._id, action: action, minimum_advance_amount: minimumAdvanceAmount });
             toast.success(response.message);
-            setOpenModal(false);
+            setShowMinimumAdvanceModal(false);
+            setMinimumAdvanceError({
+                state: false,
+                message: ''
+            })
             getMyStores();
             if (action === 1) {
                 setBtnLoading((prevState) => ({
@@ -103,7 +122,10 @@ export default function MyStores() {
                     rejectLoading: false
                 }));
             }
-
+            setMinimumAdvanceError({
+                state: false,
+                message: ''
+            })
         }
     };
 
@@ -189,10 +211,12 @@ export default function MyStores() {
                                     label={<HiOutlineDotsVertical className='w-5 h-5 cursor-pointer text-[#000]' />}
                                     dismissOnClick={false}
                                 >
-                                    <Dropdown.Item onClick={() => handleAction(1, row)} className='font-[500]'>
-                                        {
-                                            btnLoading.approveLoading ? <AiOutlineLoading className="h-4 w-4 mr-2 animate-spin" /> : <HiOutlinePlus className='w-4 h-4 mr-1' />
-                                        }
+                                    <Dropdown.Item className='font-[500]' onClick={() => {
+                                        setRow(row);
+                                        setShowMinimumAdvanceModal(true);
+                                        setOpenModal(false);
+                                    }}>
+                                        <HiOutlinePlus className='w-4 h-4 mr-1' />
                                         Accept
                                     </Dropdown.Item>
                                     <Dropdown.Item onClick={() => handleAction(2, row)} className='font-[500]'>
@@ -211,6 +235,7 @@ export default function MyStores() {
         },
 
     ]
+
 
     return (
         <>
@@ -310,6 +335,40 @@ export default function MyStores() {
                     <Button color="blue" pill onClick={() => setOpenModal(false)}>
                         <HiOutlineX className='w-5 h-5 mr-1' />
                         Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            <Modal show={showMinimumAdvanceModal} onClose={() => {
+                setShowMinimumAdvanceModal(false);
+                setMinimumAdvanceError({
+                    state: false,
+                    message: ''
+                })
+            }} size={'2xl'}>
+                <Modal.Header>Minimum Advance to be paid by user</Modal.Header>
+                <Modal.Body>
+                    <div className=''>
+                        <Label>Minimum Advance</Label>
+                        <TextInput
+                            placeholder='Enter a minimum advance to be paid by user'
+                            value={minimumAdvanceValue}
+                            onChange={(e) => setMinimumAdvanceValue(e.target.value)}
+                        />
+                        {
+                            minimumAdvanceError.state && <small className='text-[red]'>{minimumAdvanceError.message}</small>
+                        }
+                    </div>
+                </Modal.Body>
+                <Modal.Footer className='flex justify-end'>
+                    <Button color="blue" pill onClick={() => {
+                        handleAction(1, row, minimumAdvanceValue);
+
+                    }}>
+                        {
+                            btnLoading.approveLoading ? <AiOutlineLoading className="h-4 w-4 mr-2 animate-spin" /> : <HiOutlinePlus className='w-4 h-4 mr-1' />
+                        }
+                        Accept Request
                     </Button>
                 </Modal.Footer>
             </Modal>

@@ -359,12 +359,12 @@ export default function StoreDetails() {
                         <h1 className='font-[500]'>Owner Details</h1>
 
                         <Card className='p-5 relative shadow-xl'>
-                            <div className='absolute flex items-center justify-center text-center p-5'>
+                            {/* <div className='absolute flex items-center justify-center text-center p-5'>
                                 <p className='font-bold z-10 text-[#000]'>
                                     To view owner details, you need to raise the booking request and your request should be approved by the owner.
                                 </p>
-                            </div>
-                            <div className='w-full flex justify-between blur'>
+                            </div> */}
+                            <div className='w-full flex justify-between'>
                                 <div>
                                     <Label>Owner Name</Label>
                                     <TextInput

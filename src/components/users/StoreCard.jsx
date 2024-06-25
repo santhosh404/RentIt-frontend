@@ -181,7 +181,7 @@ export default function StoreCard({ storeDetails, bookingRequest, setOpenModal, 
                                                                     View logs
                                                                 </Button>
                                                             ) : (
-                                                                <Button onClick={() => handlePayNow(1, booking.booking_id)} color={'blue'} pill size={'xs'} disabled={booking.status === 1 ? false : booking.status === 2 ? true : true}>
+                                                                <Button onClick={() => handlePayNow(booking.minimum_advance_amount, booking.booking_id)} color={'blue'} pill size={'xs'} disabled={booking.status === 1 ? false : booking.status === 2 ? true : true}>
                                                                     Pay Now
                                                                 </Button>
                                                             )
