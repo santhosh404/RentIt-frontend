@@ -1,6 +1,6 @@
 import axios from 'axios';
 
 export const instance = axios.create({
-    baseURL: 'http://localhost:4000/api/v1',
+    baseURL: 'https://rentit-backend-ipwa.onrender.com/api/v1',
     timeout: 10000
 });
