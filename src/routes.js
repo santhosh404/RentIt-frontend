@@ -1,6 +1,7 @@
 import AdminSignin from "./pages/admins/auth/AdminSignin"
 import AdminSignup from "./pages/admins/auth/AdminSignup"
 import AdminHomePage from "./pages/admins/home/AdminHomePage"
+import AdminProfile from "./pages/admins/home/AdminProfile"
 import ViewOwnerRequest from "./pages/admins/home/ViewOwnerRequest"
 import ViewOwnerRequestDetail from "./pages/admins/home/ViewOwnerRequestDetail"
 import UserSignin from "./pages/users/auth/UserSignin"
@@ -109,5 +110,9 @@ export const adminProtectedRoutes = [
     {
         path: '/admin/owner-request/:id',
         element: ViewOwnerRequestDetail
+    },
+    {
+        path: '/admin/my-profile',
+        element: AdminProfile
     }
 ]

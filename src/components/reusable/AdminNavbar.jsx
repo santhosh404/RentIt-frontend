@@ -1,14 +1,25 @@
 import { Avatar, Button, Dropdown, Navbar } from 'flowbite-react'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { HiArrowCircleDown, HiLogout, HiUser, HiUserCircle } from 'react-icons/hi';
+import { HiMiniArrowDownRight, HiMiniUsers, HiOutlinePower } from 'react-icons/hi2';
 import { useNavigate } from 'react-router-dom'
 
 export default function AdminNavbar() {
     const navigate = useNavigate();
 
+    const [admin, setAdmin] = useState({})
+
     const handleSignOut = () => {
         sessionStorage.clear();
         window.location.reload();
     }
+
+    useEffect(() => {
+        const user = sessionStorage.getItem('user');
+        if (user) {
+            setAdmin(JSON.parse(user));
+        }
+    }, [])
     return (
         <>
             <Navbar fluid rounded className='border-b-2 p-4 sticky top-0 z-[999]' id='navbar'>
@@ -34,13 +45,28 @@ export default function AdminNavbar() {
                     </Navbar.Collapse>
                     <div className="flex md:order-2">
 
-                        <Dropdown inline label={<Avatar rounded bordered placeholderInitials='RR' />} className='p-3'>
-                            <Dropdown.Item>My Profile</Dropdown.Item>
-                            <Dropdown.Item onClick={() => navigate('/admin/owner-request')}>Owner Requests</Dropdown.Item>
-                            <Dropdown.Item>Users</Dropdown.Item>
-                            <Dropdown.Item>Owners</Dropdown.Item>
+                        <Dropdown inline label={<Avatar rounded bordered placeholderInitials={`${admin?.first_name?.charAt(0)?.toUpperCase()}${admin?.last_name?.charAt(0)?.toUpperCase()}`} />} className='p-3'>
+                            <Dropdown.Item onClick={() => navigate('/admin/my-profile')}>
+                                <HiUserCircle className='w-4 h-4 mr-2' />
+                                My Profile
+                            </Dropdown.Item>
+                            <Dropdown.Item onClick={() => navigate('/admin/owner-request')}>
+                                <HiArrowCircleDown className='w-4 h-4 mr-2' />
+                                Owner Requests
+                            </Dropdown.Item>
+                            <Dropdown.Item>
+                                <HiMiniUsers className='w-4 h-4 mr-2' />
+                                Users
+                            </Dropdown.Item>
+                            <Dropdown.Item>
+                                <HiUser className='w-4 h-4 mr-2' />
+                                Owners
+                            </Dropdown.Item>
                             <Dropdown.Divider />
-                            <Dropdown.Item onClick={handleSignOut}>Sign Out</Dropdown.Item>
+                            <Dropdown.Item onClick={handleSignOut}>
+                                <HiLogout className='w-4 h-4 mr-2' />
+                                Sign Out
+                            </Dropdown.Item>
                         </Dropdown>
                     </div>
                 </div>

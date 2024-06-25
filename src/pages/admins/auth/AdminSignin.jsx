@@ -40,6 +40,7 @@ export default function AdminSignIn() {
                 if (response) {
                     setLoading(false)
                     sessionStorage.setItem('token', response.data.token)
+                    sessionStorage.setItem('user', JSON.stringify(response.data.user))
                     navigate('/admin/home')
                 }
             }
