@@ -50,7 +50,7 @@ export default function MyProfile() {
                 setLoading(false);
             }
         }
-        catch(err) {
+        catch (err) {
             setLoading(false);
             toast.error(err?.response?.data?.data?.error || err?.response?.data?.message || err.message);
         }
@@ -83,7 +83,11 @@ export default function MyProfile() {
                             <div className='flex justify-between items-center'>
                                 <h1 className='font-[900] text-[23px]'>My Profile</h1>
                                 <Button pill color='blue' type='submit' isProcessing={btnLoading} processingSpinner={<AiOutlineLoading className="h-3 w-3 animate-spin" />}>
-                                    <HiOutlinePencilAlt className='w-4 h-4 mr-2 mt-[2px]' />
+                                    {
+                                        !btnLoading && (
+                                            <HiOutlinePencilAlt className='w-4 h-4 mr-2 mt-[2px]' />
+                                        )
+                                    }
                                     Update Profile
                                 </Button>
                             </div>

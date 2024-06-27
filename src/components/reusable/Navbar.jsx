@@ -16,9 +16,7 @@ export default function CustomNavbar() {
 
     useEffect(() => {
         const user = sessionStorage.getItem('user');
-        console.log(user)
         if (user) {
-            console.log(user)
             setUser(JSON.parse(user));
         }
     }, [])
@@ -89,7 +87,7 @@ export default function CustomNavbar() {
                                 </Dropdown>
                             ) : (
                                 <>
-                                    <Button pill color={'blue'} outline onClick={() => navigate('/user/sign-in')}>
+                                    <Button pill color={'light'} outline onClick={() => navigate('/user/sign-in')}>
                                         {/* <HiOutlineLogin className='w-4 h-4 mr-2' /> */}
                                         Sign In / Sign Up
                                     </Button>

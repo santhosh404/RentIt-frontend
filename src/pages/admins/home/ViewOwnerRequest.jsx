@@ -46,7 +46,6 @@ export default function ViewOwnerRequest() {
     };
 
     const handleFilterChange = async (e) => {
-        // console.log(e.target.value);
         const state = e.target.value;
         let is_approved;
 

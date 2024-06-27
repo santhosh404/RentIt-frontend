@@ -19,7 +19,6 @@ export default function BookingLogs() {
         try {
             const response = await bookingLogs();
             if (response) {
-                console.log(response);
                 setMyBookingLogs(response.data.bookedStores);
             }
         }

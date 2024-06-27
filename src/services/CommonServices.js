@@ -43,6 +43,6 @@ export const uploadFile = async (formData) => {
     }
 
     catch (err) {
-        console.log(err);
-    }
+        throw err;
+    }   
 }

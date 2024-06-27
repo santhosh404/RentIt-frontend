@@ -19,6 +19,7 @@ export default function Initiateformik() {
     const [addressDistricts, setAddressDistricts] = useState([])
     const [storeDistricts, setStoreDistricts] = useState([])
     const [loading, setLoading] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
 
     const navigate = useNavigate()
 
@@ -109,6 +110,7 @@ export default function Initiateformik() {
     }
 
     const handleFileUpload = async (e, index) => {
+        setIsUploading(true);
         const file = e.target.files[0];
 
         const formData = new FormData();
@@ -117,12 +119,15 @@ export default function Initiateformik() {
         try {
             const response = await uploadFile(formData);
             formik.setFieldValue(`store_details.${index}.proof`, response.data.fileUrl)
+            toast.success(response.message);
+            setIsUploading(false);
         }
 
         catch (err) {
+            setIsUploading(false);
             toast.error(err.response?.data?.data?.error || err.message)
         }
-       
+
     }
 
 
@@ -199,8 +204,8 @@ export default function Initiateformik() {
                                             name='email'
                                             value={formik.values?.email}
                                             disabled
-                                            // onChange={formik.handleChange}
-                                            // onBlur={formik.handleBlur}
+                                        // onChange={formik.handleChange}
+                                        // onBlur={formik.handleBlur}
                                         />
                                         {/* {
                                             formik.touched.email && formik.errors.email && (
@@ -351,7 +356,8 @@ export default function Initiateformik() {
                                         {
                                             idx > 0 && (
                                                 <Button pill color={'failure'} size={'xs'} onClick={() => removeStore(idx)}>
-                                                    <HiOutlineX className="mr-1 h-5 w-4" /> Remove
+                                                    <HiOutlineX className="mr-1 h-4 w-4" />
+                                                    Remove
                                                 </Button>
                                             )
                                         }
@@ -455,12 +461,19 @@ export default function Initiateformik() {
                                             </div>
                                             <div>
                                                 <Label>Proof</Label>
-                                                <FileInput
-                                                    size={'sm'}
-                                                    name={`store_details.${idx}.proof`}
-                                                    className='w-[280px]'
-                                                    onChange={(event) => handleFileUpload(event, idx)}
-                                                />
+                                                <div className='flex items-center gap-2'>
+                                                    <FileInput
+                                                        size={'sm'}
+                                                        name={`store_details.${idx}.proof`}
+                                                        className='w-[280px]'
+                                                        onChange={(event) => handleFileUpload(event, idx)}
+                                                    />
+                                                    {
+                                                        isUploading && (
+                                                            <AiOutlineLoading className="h-8 w-8 animate-spin" />
+                                                        )
+                                                    }
+                                                </div>
                                                 {formik.touched.store_details?.[idx]?.proof && formik.errors.store_details?.[idx]?.proof && (
                                                     <small className='text-[red]'>{formik.errors.store_details[idx].proof}</small>
                                                 )}

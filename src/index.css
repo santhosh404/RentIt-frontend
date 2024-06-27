@@ -1,4 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Playwrite+ES+Deco:wght@100..400&family=Quicksand:wght@300..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playwrite+ES+Deco:wght@100..400&family=Quicksand:wght@300..700&family=Luckiest+Guy&display=swap");
+@import url('https://fonts.googleapis.com/css2?&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -10,14 +11,17 @@
 
 body {
   background-color: rgb(167 230 255 / 5%);
+  font-size: 15px;
 }
 
-.navbar-bg {
+
+/* .navbar-bg {
   background-color: #d9f2fd !important;
-}
+} */
 
 .store-name {
-  font-family: "Playwrite ES Deco", cursive !important;
+  font-family: "Luckiest Guy", cursive !important;
+  font-size: 26px !important;
 }
 
 .rti--container .rti--input:focus {

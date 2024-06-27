@@ -40,7 +40,6 @@ export default function StoreCard({ storeDetails, bookingRequest, setOpenModal, 
 
 
                 handler: function (response) {
-                    console.log(apiResponse, response);
                     updatePaymentOnSuccess({ payment_id: apiResponse?.data?.newPayment?._id, transaction_id: response.razorpay_payment_id, status: 1 })
                         .then((r) => {
                             toast.success(r.message);

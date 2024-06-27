@@ -64,7 +64,6 @@ export default function UserHomePage() {
       const districts = await getAllDistricts(e.target.value === 'Tamil Nadu' ? 3 : e.target.value === 'Andhra Pradesh' ? 1 : e.target.value === 'Kerala' ? 2 : 4);
       if (districts) {
         setDistricts(districts.district);
-        console.log(districts)
       }
     }
     catch (error) {
