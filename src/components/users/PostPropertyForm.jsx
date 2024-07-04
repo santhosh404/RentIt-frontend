@@ -429,6 +429,7 @@ export default function PostPropertyForm({ formik, storeDetail, isUpdateOrDelete
                                 name="keyword"
                                 placeHolder="Enter the keywords related to your store"
                             />
+                            <small className='my-2 text-gray-500'>Note: Please press Enter after typing any word</small>
                             {
                                 formik.touched.keywords && formik.errors.keywords && (
                                     <small className='text-[red]'>
